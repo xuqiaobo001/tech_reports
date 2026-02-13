@@ -1,10 +1,16 @@
-# harbor-agent-generator
-
-Guide for quickly generating Harbor-compatible Agent implementations for CLI tools. Use this skill when users want to integrate a new CLI-based AI agent (coding assistant, code generation tool, etc.) into the Harbor evaluation framework, or when they need to scaffold agent code that conforms to Harbor's BaseAgent / BaseInstalledAgent interfaces.
-
+---
+name: harbor-agent-generator
+description: This skill should be used when users want to integrate a new CLI-based AI agent (coding assistant, code generation tool, etc.) into the Harbor evaluation framework. It provides step-by-step guidance for scaffolding agent code that conforms to Harbor's BaseAgent / BaseInstalledAgent interfaces, creating Jinja2 install templates, registering agents in AgentFactory, adding MCP server support, and writing unit tests. Trigger scenarios include requests like "add a new agent to Harbor", "create a Harbor adapter for X CLI tool", or "scaffold a Harbor agent".
+license: Complete terms in LICENSE.txt
 ---
 
-## Harbor Agent Architecture Overview
+# Harbor Agent Generator
+
+## Overview
+
+This skill enables rapid generation of Harbor-compatible Agent implementations for CLI tools. It covers the full lifecycle from scaffolding the Python module and Jinja2 install template to registering the agent in Harbor's factory and writing unit tests.
+
+## Harbor Agent Architecture
 
 Harbor is a Python framework (3.12+, Pydantic v2, async/await) for evaluating AI agents in containerized environments. Agents are executed inside Docker (or cloud) containers and graded by verifier scripts.
 
@@ -12,8 +18,8 @@ Harbor is a Python framework (3.12+, Pydantic v2, async/await) for evaluating AI
 
 There are two base classes an agent can extend:
 
-1. **`BaseAgent`** (`harbor.agents.base`) — low-level interface, full control.
-2. **`BaseInstalledAgent`** (`harbor.agents.installed.base`) — higher-level, for agents installed via shell script and run via CLI commands. This is the recommended path for most CLI tools.
+1. **`BaseAgent`** (`harbor.agents.base`) — Low-level interface with full control over setup and execution.
+2. **`BaseInstalledAgent`** (`harbor.agents.installed.base`) — Higher-level interface for agents installed via shell script and run via CLI commands. Recommended for most CLI tools.
 
 ### BaseAgent Required Methods
 
@@ -23,7 +29,7 @@ from harbor.environments.base import BaseEnvironment
 from harbor.models.agent.context import AgentContext
 
 class MyAgent(BaseAgent):
-    SUPPORTS_ATIF: bool = False  # Set True if you emit ATIF trajectory
+    SUPPORTS_ATIF: bool = False  # Set True if agent emits ATIF trajectory
 
     @staticmethod
     def name() -> str:
@@ -61,11 +67,9 @@ class MyCLIAgent(BaseInstalledAgent):
 
     @property
     def _install_agent_template_path(self) -> Path:
-        """Path to the Jinja2 install script template (.sh.j2)."""
         return Path(__file__).parent / "install-my-cli-agent.sh.j2"
 
     def create_run_agent_commands(self, instruction: str) -> list[ExecInput]:
-        """Return shell commands to execute the agent headlessly."""
         return [
             ExecInput(
                 command=f'my-cli-agent run --headless --prompt "{instruction}"',
@@ -74,60 +78,48 @@ class MyCLIAgent(BaseInstalledAgent):
         ]
 
     def populate_context_post_run(self, context: AgentContext) -> None:
-        """Parse trajectory/log files and populate context after execution."""
         pass
 ```
 
----
-
-## Step-by-Step: Generate a New Harbor Agent
-
-When the user asks to create a Harbor agent for a CLI tool, follow these steps in order.
+## Workflow: Generate a New Harbor Agent
 
 ### Step 1 — Gather Agent Information
 
-Ask the user for:
+Collect the following from the user:
 - **Agent name**: kebab-case identifier (e.g. `my-agent`)
 - **Python class name**: PascalCase (e.g. `MyAgent`)
 - **Installation method**: How to install the CLI tool (npm, pip, curl, apt, etc.)
 - **Run command**: The headless/non-interactive command to execute the agent with a prompt
 - **Version pinning**: Whether to pin a specific version (use Jinja2 `{{ version }}` variable)
-- **ATIF support**: Whether the agent produces trajectory logs that can be parsed into ATIF format
+- **ATIF support**: Whether the agent produces trajectory logs parseable into ATIF format
 - **MCP support**: Whether the agent supports MCP servers
 
 ### Step 2 — Create the Install Template
 
-Create a Jinja2 shell script at `src/harbor/agents/installed/install-{agent-name}.sh.j2`:
+Create `src/harbor/agents/installed/install-{agent-name}.sh.j2`:
 
 ```bash
 #!/bin/bash
 set -euo pipefail
 
-# Install system dependencies
 apt-get update
 apt-get install -y curl git
 
-# Install the agent CLI
-# Example for npm-based tool:
-npm install -g {agent-package}@{{ version }}
+# Install the agent CLI (adapt to actual install method)
+# npm:   npm install -g {agent-package}@{{ version }}
+# pip:   pip install {agent-package}=={{ version }}
+# curl:  curl -fsSL https://example.com/install.sh | bash
 
-# Example for pip-based tool:
-# pip install {agent-package}=={{ version }}
-
-# Example for curl-based installer:
-# curl -fsSL https://example.com/install.sh | bash
-
-# Ensure agent binary is on PATH
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 
 echo "INSTALL SUCCESS!"
 ```
 
-Key rules for install templates:
+Rules for install templates:
 - Always use `set -euo pipefail`
 - Use `{{ version }}` Jinja2 variable for version pinning
-- End with `echo "INSTALL SUCCESS!"` for log clarity
+- End with `echo "INSTALL SUCCESS!"`
 - Install all system dependencies (curl, git, node, etc.)
 - Export PATH additions to `~/.bashrc`
 
@@ -147,7 +139,7 @@ from harbor.models.agent.context import AgentContext
 class {ClassName}(BaseInstalledAgent):
     """Harbor agent wrapper for {agent-display-name} CLI."""
 
-    SUPPORTS_ATIF: bool = False  # Set True if trajectory parsing is implemented
+    SUPPORTS_ATIF: bool = False
 
     @staticmethod
     def name() -> str:
@@ -160,12 +152,10 @@ class {ClassName}(BaseInstalledAgent):
     def create_run_agent_commands(self, instruction: str) -> list[ExecInput]:
         commands: list[ExecInput] = []
 
-        # Optional: register MCP servers before running
         mcp_cmd = self._build_mcp_setup_command()
         if mcp_cmd:
             commands.append(ExecInput(command=mcp_cmd))
 
-        # Main agent execution command
         commands.append(
             ExecInput(
                 command=(
@@ -181,21 +171,18 @@ class {ClassName}(BaseInstalledAgent):
                 },
             )
         )
-
         return commands
 
     def populate_context_post_run(self, context: AgentContext) -> None:
-        """Parse agent output logs into context. Implement ATIF parsing here."""
         pass
 ```
 
 ### Step 4 — Register the Agent
 
-1. Add the agent name to the `AgentName` enum in `src/harbor/models/agent/name.py`:
+1. Add to `AgentName` enum in `src/harbor/models/agent/name.py`:
 
 ```python
 class AgentName(str, Enum):
-    # ... existing agents ...
     MY_AGENT = "my-agent"
 ```
 
@@ -212,8 +199,6 @@ class AgentFactory:
 ```
 
 ### Step 5 — Add MCP Server Support (if applicable)
-
-If the agent supports MCP, implement a method to write the MCP configuration file the agent expects. Example pattern from Claude Code agent:
 
 ```python
 def _build_mcp_setup_command(self) -> str | None:
@@ -243,8 +228,6 @@ def _build_mcp_setup_command(self) -> str | None:
 Create `tests/unit/agents/installed/test_{agent_name}.py`:
 
 ```python
-"""Unit tests for {AgentDisplayName} agent."""
-
 import pytest
 from harbor.agents.installed.{agent_module} import {ClassName}
 
@@ -270,23 +253,13 @@ class TestCreateRunAgentCommands:
 
 ### Step 7 — Validate
 
-Run the following checks:
 ```bash
-# Lint
 uvx ruff check src/harbor/agents/installed/{agent_name}.py
-
-# Format
 uvx ruff format src/harbor/agents/installed/{agent_name}.py
-
-# Unit tests
 uv run pytest tests/unit/agents/installed/test_{agent_name}.py -v
 ```
 
----
-
 ## File Checklist
-
-When generating a new Harbor agent, ensure these files are created/modified:
 
 | File | Action |
 |------|--------|
@@ -296,22 +269,13 @@ When generating a new Harbor agent, ensure these files are created/modified:
 | `src/harbor/agents/factory.py` | Modify — import and register agent |
 | `tests/unit/agents/installed/test_{agent_name}.py` | Create — unit tests |
 
----
-
 ## Common Patterns Reference
 
 ### Model Name Handling
-Harbor passes model names as `provider/model` (e.g. `anthropic/claude-opus-4-1`). The base class parses this into `self._parsed_model_provider` and `self._parsed_model_name`. Use these in your `create_run_agent_commands()` to pass the correct model config to the CLI tool.
+Harbor passes model names as `provider/model` (e.g. `anthropic/claude-opus-4-1`). The base class parses this into `self._parsed_model_provider` and `self._parsed_model_name`.
 
 ### Timeout Handling
-Agent timeouts are managed by the orchestrator. Your `run()` / `create_run_agent_commands()` does not need to implement timeout logic — the environment's `exec()` call handles it.
-
-### Logging
-Use `self.logger` (inherited from BaseAgent) for structured logging:
-```python
-self.logger.info("Starting agent execution")
-self.logger.debug(f"Running command: {cmd}")
-```
+Agent timeouts are managed by the orchestrator. The `run()` / `create_run_agent_commands()` does not need timeout logic.
 
 ### ExecInput Fields
 ```python
@@ -322,3 +286,8 @@ ExecInput(
     timeout_sec=300,      # Per-command timeout override (optional)
 )
 ```
+
+## Resources
+
+### references/
+- `references/harbor_agent_api.md` — Detailed Harbor agent API reference extracted from source code, including BaseAgent, BaseInstalledAgent, AgentContext, and MCPServerConfig interfaces.

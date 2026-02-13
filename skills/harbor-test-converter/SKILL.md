@@ -1,8 +1,14 @@
-# harbor-test-converter
-
-Guide for converting existing test suites (pytest, unittest, Jest, Mocha, Go test, shell scripts, etc.) into Harbor-compatible evaluation tasks. Use this skill when users have pre-existing test cases and want to transform them into Harbor task format so they can be used to evaluate AI agents automatically. This skill covers the structural mapping, reward wiring, Dockerfile generation, and common pitfalls of conversion.
-
 ---
+name: harbor-test-converter
+description: This skill should be used when users have pre-existing test suites (pytest, unittest, Jest, Mocha, Go test, shell scripts, etc.) and want to convert them into Harbor-compatible evaluation tasks. It provides structural mapping, reward wiring, Dockerfile generation, path adaptation, and validation workflows. Trigger scenarios include requests like "convert my tests to Harbor format", "migrate existing test suite to Harbor", "make my pytest tests work in Harbor", or "transform test cases into Harbor tasks".
+license: Complete terms in LICENSE.txt
+---
+
+# Harbor Test Converter
+
+## Overview
+
+This skill enables converting existing test suites into Harbor-compatible evaluation tasks. It covers the structural mapping from various test frameworks to Harbor's task directory layout, reward wiring, Dockerfile generation, path adaptation, and a validation workflow to ensure correctness.
 
 ## Conversion Overview
 
@@ -15,7 +21,7 @@ Harbor tasks require a specific directory layout and a verifier script (`test.sh
 5. Writing an `instruction.md` that describes the task without leaking test details
 6. Configuring `task.toml` with appropriate timeouts and resources
 
-### Harbor Task Directory Structure (Target)
+### Target Directory Structure
 
 ```
 converted-task/
@@ -26,14 +32,12 @@ converted-task/
 │   └── (source files)     # Pre-existing code the agent works on
 ├── tests/
 │   ├── test.sh            # Verifier entry point (REQUIRED)
-│   └── (original tests)   # Your converted test files
+│   └── (original tests)   # Converted test files
 └── solution/              # Optional reference solution
     └── solve.sh
 ```
 
----
-
-## Step-by-Step Conversion Process
+## Workflow: Convert Existing Tests
 
 ### Step 1 — Analyze the Existing Test Suite
 
@@ -56,22 +60,21 @@ version = "1.0"
 
 [metadata]
 author_name = "Converter"
-difficulty = "medium"        # Estimate based on test complexity
+difficulty = "medium"
 category = "programming"
-tags = ["converted", "python"]  # Add relevant tags
+tags = ["converted"]
 
 [verifier]
 timeout_sec = 180.0          # Based on original test suite runtime + buffer
 
 [agent]
-timeout_sec = 600.0          # Give agent enough time to work
+timeout_sec = 600.0
 
 [environment]
 build_timeout_sec = 600.0
 cpus = 1
 memory = "2G"
 storage = "10G"
-# allow_internet = true      # Only if tests need network access
 ```
 
 ### Step 3 — Convert Tests by Framework
@@ -81,8 +84,7 @@ storage = "10G"
 Original structure:
 ```
 project/
-├── src/
-│   └── mylib/
+├── src/mylib/
 ├── tests/
 │   ├── conftest.py
 │   ├── test_core.py
@@ -100,13 +102,11 @@ apt-get install -y curl
 curl -LsSf https://astral.sh/uv/0.9.7/install.sh | sh
 source $HOME/.local/bin/env
 
-# Install project dependencies from the agent's work
 cd /workdir
 if [ -f pyproject.toml ]; then
   uv sync 2>/dev/null || true
 fi
 
-# Run the converted test suite
 uvx \
   --with pytest==8.4.1 \
   --with pytest-json-ctrf==0.3.5 \
@@ -119,21 +119,20 @@ else
 fi
 ```
 
-Conversion notes for pytest:
-- Copy `test_*.py` files to `tests/` directory
-- Copy `conftest.py` if tests depend on shared fixtures
+Key adaptations:
+- Copy `test_*.py` and `conftest.py` to `tests/` directory
 - Replace relative imports with absolute paths (`/workdir/`, `/tests/`)
 - Pin pytest version in `uvx --with`
-- If tests import the project, ensure `/workdir` is on `PYTHONPATH`
+- Ensure `/workdir` is on `PYTHONPATH` if tests import the project
 
-Fixture adaptation pattern:
+Fixture path adaptation:
 ```python
-# BEFORE (original conftest.py — relative paths)
+# BEFORE (relative)
 @pytest.fixture
 def sample_data():
     return Path("tests/data/sample.json")
 
-# AFTER (Harbor — absolute paths)
+# AFTER (Harbor absolute)
 @pytest.fixture
 def sample_data():
     return Path("/tests/data/sample.json")
@@ -141,25 +140,10 @@ def sample_data():
 
 #### Converting unittest Tests
 
-Original:
-```python
-import unittest
-
-class TestCalculator(unittest.TestCase):
-    def test_add(self):
-        self.assertEqual(add(1, 2), 3)
-
-    def test_subtract(self):
-        self.assertEqual(subtract(5, 3), 2)
-```
-
-Converted `tests/test.sh`:
 ```bash
 #!/bin/bash
 
 cd /workdir
-
-# Add workdir to Python path so tests can import the module
 export PYTHONPATH="/workdir:$PYTHONPATH"
 
 python -m pytest /tests/test_calculator.py -v 2>&1 | tee /logs/verifier/output.txt
@@ -171,49 +155,26 @@ else
 fi
 ```
 
-Conversion notes for unittest:
-- unittest tests run fine under pytest — no need to rewrite
-- Replace `self.assert*` calls only if they reference relative paths
-- Move test data files and update paths
+Note: unittest tests run fine under pytest — no need to rewrite.
 
 #### Converting Jest / Mocha (JavaScript) Tests
 
-Original:
-```javascript
-describe('API', () => {
-  test('returns 200 on health check', async () => {
-    const res = await request(app).get('/health');
-    expect(res.status).toBe(200);
-  });
-});
-```
-
-Converted `tests/test.sh`:
 ```bash
 #!/bin/bash
 
-# Install Node.js if not in base image
-apt-get update
-apt-get install -y curl
+apt-get update && apt-get install -y curl
 curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 apt-get install -y nodejs
 
 cd /workdir
-
-# Install project dependencies
 npm install 2>/dev/null || true
-
-# Install test runner
 npm install --save-dev jest 2>/dev/null || true
 
-# Copy test files into project
 cp /tests/*.test.js /workdir/tests/ 2>/dev/null || true
 cp /tests/*.spec.js /workdir/tests/ 2>/dev/null || true
 
-# Run tests with JSON output
 npx jest --json --outputFile=/logs/verifier/jest-results.json 2>&1 || true
 
-# Parse results for reward
 if [ -f /logs/verifier/jest-results.json ]; then
   PASSED=$(node -e "
     const r = require('/logs/verifier/jest-results.json');
@@ -229,26 +190,12 @@ fi
 
 #### Converting Go Tests
 
-Original:
-```go
-func TestAdd(t *testing.T) {
-    result := Add(1, 2)
-    if result != 3 {
-        t.Errorf("expected 3, got %d", result)
-    }
-}
-```
-
-Converted `tests/test.sh`:
 ```bash
 #!/bin/bash
 
 cd /workdir
-
-# Copy test files into the Go module
 cp /tests/*_test.go /workdir/ 2>/dev/null || true
 
-# Run Go tests with JSON output
 go test -v -json ./... > /logs/verifier/go-test.json 2>&1
 
 if [ $? -eq 0 ]; then
@@ -260,19 +207,6 @@ fi
 
 #### Converting Shell Script Tests
 
-Original:
-```bash
-#!/bin/bash
-# test_deploy.sh
-if curl -s http://localhost:8080/health | grep -q "ok"; then
-  echo "PASS: health check"
-else
-  echo "FAIL: health check"
-  exit 1
-fi
-```
-
-Converted `tests/test.sh`:
 ```bash
 #!/bin/bash
 
@@ -289,12 +223,9 @@ run_check() {
   fi
 }
 
-# Convert each original assertion to a run_check call
 run_check '[ -f /workdir/deploy.sh ]' "deploy script exists"
 run_check 'bash /workdir/deploy.sh --dry-run 2>&1 | grep -q "success"' "dry run succeeds"
-run_check '[ -f /workdir/config.yaml ]' "config file created"
 
-# Calculate reward
 if [ "$TOTAL" -gt 0 ]; then
   REWARD=$(echo "scale=4; $PASSED / $TOTAL" | bc)
   echo "$REWARD" > /logs/verifier/reward.txt
@@ -302,8 +233,6 @@ else
   echo 0 > /logs/verifier/reward.txt
 fi
 ```
-
----
 
 ### Step 4 — Create the Dockerfile
 
@@ -318,34 +247,25 @@ Choose a base image matching the original test runtime:
 | Rust | `rust:1.78-slim` |
 | Multi-language | `ubuntu:22.04` |
 
-Example Dockerfile:
 ```dockerfile
 FROM python:3.12-slim
-
 WORKDIR /workdir
-
-# System dependencies needed by both agent and tests
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git curl build-essential \
     && rm -rf /var/lib/apt/lists/*
-
-# Copy the project source code (the "broken" or "incomplete" version)
-# that the agent needs to fix/complete
 COPY src/ /workdir/src/
 COPY pyproject.toml /workdir/
-
-# Pre-install project dependencies to speed up agent execution
 RUN pip install -e . 2>/dev/null || true
 ```
 
 Key rules:
-- Copy the project source into `/workdir/` — this is what the agent sees and modifies
-- Do NOT copy test files into the Dockerfile — Harbor copies `tests/` to `/tests/` automatically
+- Copy project source into `/workdir/`
+- Do NOT copy test files — Harbor copies `tests/` to `/tests/` automatically
 - Pre-install heavy dependencies to reduce agent setup time
 
 ### Step 5 — Write instruction.md
 
-Convert the test intent into a natural language task description. Do NOT reveal test implementation details.
+Convert the test intent into a natural language task description. Do NOT reveal test details.
 
 ```markdown
 # Fix the Calculator Module
@@ -353,64 +273,34 @@ Convert the test intent into a natural language task description. Do NOT reveal 
 The calculator module in `src/calculator.py` has bugs in the `add()` and `subtract()` functions.
 
 ## Requirements
-
 - Fix `add(a, b)` to correctly return the sum of two numbers
 - Fix `subtract(a, b)` to correctly return the difference
 - Do not change function signatures
-- All existing imports and module structure should be preserved
-
-## Files
-
-- `src/calculator.py` — the module to fix
 ```
 
-Instruction rules:
+Rules:
 - Describe WHAT needs to be done, not HOW to verify it
-- Never mention specific test names, assertions, or expected values that would let the agent "cheat"
+- Never mention specific test names, assertions, or expected values
 - Be specific about file locations and function signatures
-- State constraints clearly
 
 ### Step 6 — Handle Test Dependencies and Data
 
-#### Test Data Files
-```
-tests/
-├── test.sh
-├── test_solution.py
-└── data/
-    ├── input.json        # Test fixtures
-    └── expected.csv      # Expected outputs
-```
-
-Reference in tests with absolute paths:
+Test data files — reference with absolute paths:
 ```python
 DATA_DIR = Path("/tests/data")
 
 def test_process():
     input_data = json.loads((DATA_DIR / "input.json").read_text())
-    # ...
 ```
 
-#### External Dependencies
-If original tests use libraries not in the base image, install them in `test.sh`:
+External dependencies — install in `test.sh`:
 ```bash
-# In test.sh, before running tests
 uvx --with pytest==8.4.1 \
     --with requests==2.32.0 \
-    --with beautifulsoup4==4.12.0 \
     pytest /tests/ -rA
 ```
 
-Or for non-Python:
-```bash
-npm install --save-dev @testing-library/jest-dom supertest
-```
-
----
-
 ## Conversion Checklist
-
-Use this checklist for every conversion:
 
 ### Structure
 - [ ] `task.toml` created with appropriate timeouts and resources
@@ -418,7 +308,7 @@ Use this checklist for every conversion:
 - [ ] `environment/Dockerfile` provides the correct runtime
 - [ ] `tests/test.sh` is the entry point and is executable
 - [ ] Original test files are in `tests/` directory
-- [ ] Test data files are included in `tests/` with absolute path references
+- [ ] Test data files included with absolute path references
 
 ### Path Fixes
 - [ ] All relative paths converted to absolute (`/workdir/`, `/tests/`)
@@ -429,8 +319,8 @@ Use this checklist for every conversion:
 ### Reward Wiring
 - [ ] `test.sh` writes reward to `/logs/verifier/reward.txt` or `/logs/verifier/reward.json`
 - [ ] Reward is always written, even on test infrastructure failure
-- [ ] Reward value is between 0.0 and 1.0
-- [ ] Partial credit is calculated correctly (if applicable)
+- [ ] Reward value between 0.0 and 1.0
+- [ ] Partial credit calculated correctly (if applicable)
 
 ### Robustness
 - [ ] `test.sh` uses non-interactive installs (`-y`, `DEBIAN_FRONTEND=noninteractive`)
@@ -444,8 +334,6 @@ Use this checklist for every conversion:
 - [ ] Run with `oracle` agent to verify tests pass with reference solution
 - [ ] Run with `nop` agent to verify tests fail without a solution (reward = 0)
 
----
-
 ## Common Conversion Pitfalls
 
 | Pitfall | Symptom | Fix |
@@ -453,105 +341,15 @@ Use this checklist for every conversion:
 | Relative imports in tests | `ModuleNotFoundError` | Add `PYTHONPATH=/workdir` or use absolute imports |
 | Missing test dependencies | `ImportError` in verifier | Install in `test.sh` with pinned versions |
 | Tests modify source files | Flaky results across runs | Use temp copies or reset state in setup |
-| Hardcoded localhost ports | Port conflicts in container | Use dynamic ports or fixed non-conflicting ports |
+| Hardcoded localhost ports | Port conflicts in container | Use dynamic or fixed non-conflicting ports |
 | Tests assume specific OS | Fails in Docker container | Use compatible base image, install missing tools |
-| No reward on crash | `NaN` reward in Harbor | Wrap test runner in `\|\| true`, always write reward |
-| Tests leak expected answers | Agent "cheats" by reading tests | Tests are in `/tests/`, agent works in `/workdir/` — but don't put answers in instruction.md |
+| No reward on crash | `NaN` reward in Harbor | Wrap test runner in `|| true`, always write reward |
 | conftest.py not copied | Fixtures not found | Include conftest.py in `tests/` directory |
 | Test ordering dependency | Random failures | Use `pytest-ordering` or restructure tests |
-| Large test data in repo | Slow Docker build | Use `.dockerignore` or download at test time |
 
----
+## Batch Conversion
 
-## Batch Conversion Pattern
-
-For converting multiple test files from a test suite into separate Harbor tasks:
-
-```python
-"""Script to batch-convert a test suite into Harbor tasks."""
-
-import os
-import shutil
-from pathlib import Path
-
-def convert_test_to_task(
-    test_file: Path,
-    source_dir: Path,
-    output_dir: Path,
-    base_image: str = "python:3.12-slim",
-):
-    task_name = test_file.stem.replace("test_", "")
-    task_dir = output_dir / task_name
-
-    # Create task structure
-    (task_dir / "tests").mkdir(parents=True, exist_ok=True)
-    (task_dir / "environment").mkdir(parents=True, exist_ok=True)
-    (task_dir / "solution").mkdir(parents=True, exist_ok=True)
-
-    # Copy test file
-    shutil.copy2(test_file, task_dir / "tests" / test_file.name)
-
-    # Generate test.sh
-    (task_dir / "tests" / "test.sh").write_text(f"""#!/bin/bash
-apt-get update && apt-get install -y curl
-curl -LsSf https://astral.sh/uv/0.9.7/install.sh | sh
-source $HOME/.local/bin/env
-
-export PYTHONPATH="/workdir:$PYTHONPATH"
-
-uvx \\
-  --with pytest==8.4.1 \\
-  --with pytest-json-ctrf==0.3.5 \\
-  pytest --ctrf /logs/verifier/ctrf.json /tests/{test_file.name} -rA
-
-if [ $? -eq 0 ]; then
-  echo 1 > /logs/verifier/reward.txt
-else
-  echo 0 > /logs/verifier/reward.txt
-fi
-""")
-
-    # Generate task.toml
-    (task_dir / "task.toml").write_text("""version = "1.0"
-
-[metadata]
-author_name = "Converted"
-difficulty = "medium"
-category = "programming"
-tags = ["converted"]
-
-[verifier]
-timeout_sec = 180.0
-
-[agent]
-timeout_sec = 600.0
-
-[environment]
-build_timeout_sec = 600.0
-cpus = 1
-memory = "2G"
-storage = "10G"
-""")
-
-    # Generate Dockerfile
-    (task_dir / "environment" / "Dockerfile").write_text(f"""FROM {base_image}
-WORKDIR /workdir
-RUN apt-get update && apt-get install -y --no-install-recommends \\
-    git curl build-essential \\
-    && rm -rf /var/lib/apt/lists/*
-COPY . /workdir/
-""")
-
-    # Generate placeholder instruction.md
-    (task_dir / "instruction.md").write_text(
-        f"# {task_name.replace('_', ' ').title()}\n\n"
-        "TODO: Write task instruction based on what the tests verify.\n"
-    )
-
-    return task_dir
-```
-
----
+To convert multiple test files into separate Harbor tasks, refer to `references/batch_converter.md` for a Python script template that automates the directory scaffolding, test.sh generation, task.toml creation, and Dockerfile generation.
 
 ## Validation Workflow
 
@@ -561,10 +359,10 @@ After conversion, validate with Harbor's built-in tools:
 # 1. Validate task structure
 harbor tasks validate ./converted-task/
 
-# 2. Run with oracle agent (should pass — uses reference solution)
+# 2. Run with oracle agent (should pass)
 harbor run --dataset ./converted-task/ --agent oracle
 
-# 3. Run with nop agent (should fail — no solution applied)
+# 3. Run with nop agent (should fail — reward = 0)
 harbor run --dataset ./converted-task/ --agent nop
 
 # 4. Run with a real agent to verify end-to-end
@@ -572,3 +370,8 @@ harbor run --dataset ./converted-task/ --agent claude-code --model anthropic/cla
 ```
 
 If the oracle agent fails, the test conversion has a bug. If the nop agent passes, the tests are not actually verifying agent work.
+
+## Resources
+
+### references/
+- `references/batch_converter.md` — Python script template for batch-converting multiple test files into Harbor tasks.
