@@ -487,13 +487,122 @@ rdma link show
 
 ---
 
-## 九、总结
+## 九、实战案例分析：GLM-4.7-Flash-30B-A3B 7P1D 部署方案中 P 节点 GPU 故障
+
+### 9.1 部署方案
+
+- **模型**：GLM-4.7-Flash-30B-A3B（MoE 架构，30B 总参数，3B 激活参数）
+- **部署架构**：7P1D（7个 Prefill 节点 + 1个 Decode 节点）
+- **故障场景**：其中1个 P 节点因 GPU 卡故障持续不可用
+
+### 9.2 错误是否在预料之中？
+
+**结论：完全在预料之中，且是确定性行为。**
+
+该场景精确命中本报告的**场景1：Prefill 实例宕机或网络不可达**。故障的 P 节点无法响应任何请求，D 节点会通过 heartbeat 机制检测到并报错。
+
+### 9.3 故障触发链路
+
+```
+                         ┌─ P1 (健康) ─── 正常返回 KV cache
+                         ├─ P2 (健康) ─── 正常返回 KV cache
+                         ├─ P3 (健康) ─── 正常返回 KV cache
+请求到达 ──→ 路由分发 ──├─ P4 (健康) ─── 正常返回 KV cache
+                         ├─ P5 (健康) ─── 正常返回 KV cache
+                         ├─ P6 (健康) ─── 正常返回 KV cache
+                         └─ P7 (故障) ─── GPU卡故障 → 无响应 → 报错
+```
+
+### 9.4 D 节点检测到故障的完整代码流程
+
+**Step 1：Heartbeat 检测**（`mooncake/conn.py:1497-1549`）
+
+D 节点每 2 秒对所有 P 节点做 HTTP 健康检查。故障的 P7 节点无法响应 `/health`，连续失败 1 次后触发：
+
+```
+heartbeat_failures[P7_addr] >= max_failures (默认1)
+  → _handle_node_failure(P7_addr)
+```
+
+**Step 2：批量标记失败**（`mooncake/conn.py:1602-1631`）
+
+```python
+def _handle_node_failure(self, failed_bootstrap_addr):
+    # 找到该 P 节点上所有未完成的请求
+    possible_affected_rooms = self.addr_to_rooms_tracker.get(failed_bootstrap_addr, [])
+
+    for room in possible_affected_rooms:
+        if room in self.request_status and self.check_status(room) != KVPoll.Success:
+            self.record_failure(room, "Losing connection with prefill instance ...")
+            self.update_status(room, KVPoll.Failed)  # ← 触发错误
+```
+
+**Step 3：请求被 abort 并释放资源**（`decode.py:1106-1127`）
+
+```python
+if poll == KVPoll.Failed:
+    error_message = f"Decode transfer failed for request ... bootstrap_room=..."
+    prepare_abort(decode_req.req, error_message, ...)
+    self.scheduler.stream_output([decode_req.req], decode_req.req.return_logprob)
+    release_kv_cache(decode_req.req, self.tree_cache, is_insert=False)  # 释放 KV cache
+    indices_to_remove.add(i)
+```
+
+### 9.5 影响范围分析
+
+| 问题 | 回答 |
+|------|------|
+| **哪些请求会报错？** | 只有被路由到故障 P7 的请求会报错 |
+| **路由到其他6个健康P节点的请求？** | **不受影响**，正常处理 |
+| **报错比例？** | 大约 **1/7 的请求**（~14.3%）会失败 |
+| **是偶发还是必现？** | **必现**，只要请求被路由到故障 P7 就一定会报错 |
+| **是否会引发内存泄露？** | **不会**，`release_kv_cache(req, tree_cache, is_insert=False)` 会释放已分配的 KV cache |
+
+### 9.6 典型日志特征
+
+```
+# D 节点日志 - heartbeat 检测到 P7 不可达
+Attempting to reconnect to <P7_addr>...
+
+# D 节点日志 - 节点故障声明
+Losing connection with prefill instance (bootstrap_addr: <P7_addr>), X requests affected
+
+# D 节点日志 - 请求级错误
+Decode transfer failed for request rank=0 rid=... bootstrap_room=...
+Failed to get kvcache from prefill instance, it might be dead
+```
+
+### 9.7 这是 SGLang 的 Bug 吗？
+
+**不是 Bug，而是设计预期的容错行为。**
+
+SGLang 的 PD 分离架构正确地做到了：
+1. 通过 heartbeat 机制及时检测到故障 P 节点
+2. 将受影响请求标记为 Failed，避免无限等待
+3. 调用 `release_kv_cache()` 释放已分配的 GPU 资源
+4. 路由到其他健康 P 节点的请求不受影响
+
+问题根因是**故障 P 节点未被及时从集群中摘除**，而非框架缺陷。
+
+### 9.8 处理建议
+
+| 方案 | 描述 | 优先级 |
+|------|------|--------|
+| **立即修复** | 替换故障 GPU 卡，恢复 P7 节点 | 高 |
+| **临时方案** | 将部署改为 **6P1D**，从集群中摘除故障 P7，虽然吞吐下降约14%但所有请求正常 | 高 |
+| **长期优化** | 在负载均衡/路由层添加健康检查，自动将请求路由到健康 P 节点，避免请求分配到故障节点 | 中 |
+| **监控告警** | 针对 `Losing connection with prefill instance` 日志设置告警，第一时间发现节点故障 | 中 |
+
+---
+
+## 十、总结
 
 | 问题 | 回答 |
 |------|------|
 | 该错误在什么架构下出现？ | PD 分离架构（Prefill-Decode Disaggregation） |
-| 最常见的触发原因？ | Prefill 实例宕机/崩溃（OOM、进程异常） |
+| 最常见的触发原因？ | Prefill 实例宕机/崩溃（OOM、进程异常、GPU硬件故障） |
 | 第二常见的触发原因？ | 网络传输超时（Bootstrap/Waiting 阶段） |
 | 与超长输入的关联？ | 36K+ 输入可能导致 prefill OOM → 实例崩溃 → 报错 |
 | 是否影响其他请求？ | 是，一个 prefill 节点宕机会导致其上所有请求失败 |
-| 如何预防？ | 合理配置 context-length、增大超时、监控 prefill GPU 使用率 |
+| 7P1D 中1个P故障的影响？ | ~14.3%请求失败，其余6个P正常；框架行为正确，非Bug |
+| 如何预防？ | 合理配置 context-length、增大超时、监控 prefill GPU 使用率、故障节点及时摘除 |
