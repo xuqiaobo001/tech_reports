@@ -7,6 +7,7 @@
 
 ## 目录
 
+- [推理性能优化](#推理性能优化)
 - [AI 推理框架（SGLang）](#ai-推理框架sglang)
 - [AI 推理框架（vLLM）](#ai-推理框架vllm)
 - [云存储服务对比](#云存储服务对比)
@@ -20,21 +21,30 @@
 
 ---
 
+## 推理性能优化
+
+| # | 目录 | 简介 |
+|---|------|------|
+| 1 | [vllm_inference_speed_optimization](./vllm_inference_speed_optimization/) | vLLM 推理速度优化部署参数全景图 — 8 大维度 50+ 参数深度分析，含场景化调优策略 |
+| 2 | [sglang_inference_speed_optimization](./sglang_inference_speed_optimization/) | SGLang 推理速度优化部署参数全景图 — 8 大维度 60+ 参数深度分析，含 SGLang vs vLLM 对比 |
+
+---
+
 ## AI 推理框架（SGLang）
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 1 | [sglang_pd_disaggregation_architecture_analysis](./sglang_pd_disaggregation_architecture_analysis/) | SGLang PD 分离架构全景分析 — P/D/Router 三进程启动序列、参数配置与协同机制 |
-| 2 | [sglang_pd_startup_params_reference](./sglang_pd_startup_params_reference/) | SGLang PD 分离架构 P/D/Router 全部启动参数详解与调优建议 |
-| 3 | [sglang_kvcache_prefill_failure_analysis](./sglang_kvcache_prefill_failure_analysis/) | "Failed to get kvcache from prefill instance" 错误的所有触发场景及根因分析 |
-| 4 | [sglang_prefill_bootstrap_failed_analysis](./sglang_prefill_bootstrap_failed_analysis/) | Prefill Bootstrap Failed 错误根因分析，覆盖所有异常路径 |
-| 5 | [sglang_router_decode_forwarding_failure_analysis](./sglang_router_decode_forwarding_failure_analysis/) | Router 转发请求到 Decode 节点失败场景分析 — 断路器、健康检查、重试逻辑 |
-| 6 | [sglang_decode_memory_leak_analysis](./sglang_decode_memory_leak_analysis/) | 超长输入场景下 Decode 节点异常与内存/HBM 泄露分析 |
-| 7 | [sglang_context_length_limit_analysis](./sglang_context_length_limit_analysis/) | SGLang 三层上下文长度限制体系与超限行为分析 |
-| 8 | [sglang_prefill_schedule_policy_analysis](./sglang_prefill_schedule_policy_analysis/) | Prefill 节点请求调度算法、Radix Cache 淘汰策略与 Prefill Delayer 协调机制 |
-| 9 | [sglang_transfer_backend_comparison](./sglang_transfer_backend_comparison/) | KV Cache 传输后端对比选型 — mooncake/nixl/ascend/fake/mori 五种后端 |
-| 10 | [sglang_ascend_vs_mooncake_code_analysis](./sglang_ascend_vs_mooncake_code_analysis/) | SGLang Ascend vs Mooncake 传输后端代码差异与优化分析 |
-| 11 | [sglang_ttft_tpot_latency_analysis](./sglang_ttft_tpot_latency_analysis/) | PD 分离架构下不同输入/输出长度组合的 TTFT/TPOT 时延变化趋势 |
+| 3 | [sglang_pd_disaggregation_architecture_analysis](./sglang_pd_disaggregation_architecture_analysis/) | SGLang PD 分离架构全景分析 — P/D/Router 三进程启动序列、参数配置与协同机制 |
+| 4 | [sglang_pd_startup_params_reference](./sglang_pd_startup_params_reference/) | SGLang PD 分离架构 P/D/Router 全部启动参数详解与调优建议 |
+| 5 | [sglang_kvcache_prefill_failure_analysis](./sglang_kvcache_prefill_failure_analysis/) | "Failed to get kvcache from prefill instance" 错误的所有触发场景及根因分析 |
+| 6 | [sglang_prefill_bootstrap_failed_analysis](./sglang_prefill_bootstrap_failed_analysis/) | Prefill Bootstrap Failed 错误根因分析，覆盖所有异常路径 |
+| 7 | [sglang_router_decode_forwarding_failure_analysis](./sglang_router_decode_forwarding_failure_analysis/) | Router 转发请求到 Decode 节点失败场景分析 — 断路器、健康检查、重试逻辑 |
+| 8 | [sglang_decode_memory_leak_analysis](./sglang_decode_memory_leak_analysis/) | 超长输入场景下 Decode 节点异常与内存/HBM 泄露分析 |
+| 9 | [sglang_context_length_limit_analysis](./sglang_context_length_limit_analysis/) | SGLang 三层上下文长度限制体系与超限行为分析 |
+| 10 | [sglang_prefill_schedule_policy_analysis](./sglang_prefill_schedule_policy_analysis/) | Prefill 节点请求调度算法、Radix Cache 淘汰策略与 Prefill Delayer 协调机制 |
+| 11 | [sglang_transfer_backend_comparison](./sglang_transfer_backend_comparison/) | KV Cache 传输后端对比选型 — mooncake/nixl/ascend/fake/mori 五种后端 |
+| 12 | [sglang_ascend_vs_mooncake_code_analysis](./sglang_ascend_vs_mooncake_code_analysis/) | SGLang Ascend vs Mooncake 传输后端代码差异与优化分析 |
+| 13 | [sglang_ttft_tpot_latency_analysis](./sglang_ttft_tpot_latency_analysis/) | PD 分离架构下不同输入/输出长度组合的 TTFT/TPOT 时延变化趋势 |
 
 ---
 
@@ -42,11 +52,11 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 12 | [vllm_vs_sglang_pd_disaggregation_report](./vllm_vs_sglang_pd_disaggregation_report/) | vLLM vs SGLang P/D 分离机制深度对比 — 架构、调度、KV 传输全面比较 |
-| 13 | [vllm_sglang_precision_divergence_report](./vllm_sglang_precision_divergence_report/) | vLLM vs SGLang 加载同一模型的 9 维精度差异源码级根因分析 |
-| 14 | [vllm_ascend_distributed_deployment](./vllm_ascend_distributed_deployment/) | vLLM-Ascend 分布式部署架构 — Head/Worker 分层架构与分离部署方案 |
-| 15 | [vllm_multi_p_node_scheduler_report](./vllm_multi_p_node_scheduler_report/) | vLLM 多 P 节点调度机制 — 独立调度域、Round-Robin 分发与无全局调度器设计 |
-| 16 | [vllm_ray_k8s_pd_deployment_report](./vllm_ray_k8s_pd_deployment_report/) | vLLM Ray 组件用法分析 + K8s 下 P/D 分离最佳部署方案 |
+| 14 | [vllm_vs_sglang_pd_disaggregation_report](./vllm_vs_sglang_pd_disaggregation_report/) | vLLM vs SGLang P/D 分离机制深度对比 — 架构、调度、KV 传输全面比较 |
+| 15 | [vllm_sglang_precision_divergence_report](./vllm_sglang_precision_divergence_report/) | vLLM vs SGLang 加载同一模型的 9 维精度差异源码级根因分析 |
+| 16 | [vllm_ascend_distributed_deployment](./vllm_ascend_distributed_deployment/) | vLLM-Ascend 分布式部署架构 — Head/Worker 分层架构与分离部署方案 |
+| 17 | [vllm_multi_p_node_scheduler_report](./vllm_multi_p_node_scheduler_report/) | vLLM 多 P 节点调度机制 — 独立调度域、Round-Robin 分发与无全局调度器设计 |
+| 18 | [vllm_ray_k8s_pd_deployment_report](./vllm_ray_k8s_pd_deployment_report/) | vLLM Ray 组件用法分析 + K8s 下 P/D 分离最佳部署方案 |
 
 ---
 
@@ -54,8 +64,8 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 17 | [huaweicloud_sfs_vs_aliyun_cpfs_report](./huaweicloud_sfs_vs_aliyun_cpfs_report/) | 华为云 SFS Turbo vs 阿里云 CPFS（通用版+智算版）深度对比 |
-| 18 | [aliyun_oss_vs_huawei_obs_report](./aliyun_oss_vs_huawei_obs_report/) | 阿里云 OSS vs 华为云 OBS 对象存储深度对比 — 规格、场景、价格、技术竞争力 |
+| 19 | [huaweicloud_sfs_vs_aliyun_cpfs_report](./huaweicloud_sfs_vs_aliyun_cpfs_report/) | 华为云 SFS Turbo vs 阿里云 CPFS（通用版+智算版）深度对比 |
+| 20 | [aliyun_oss_vs_huawei_obs_report](./aliyun_oss_vs_huawei_obs_report/) | 阿里云 OSS vs 华为云 OBS 对象存储深度对比 — 规格、场景、价格、技术竞争力 |
 
 ---
 
@@ -63,11 +73,11 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 19 | [anthropic_engineering_report](./anthropic_engineering_report/) | Anthropic 工程技术理论与实践研究报告 — Agent 架构、上下文工程、评估体系、MCP 协议、多智能体、安全基础设施六大主题域 |
-| 20 | [agent_teams_evaluation_report](./agent_teams_evaluation_report/) | Agent Teams / Multi-Agent AI Systems 技术评估 — 架构、优劣势、业界评价、适用场景 |
-| 21 | [skills_vs_subagents_report](./skills_vs_subagents_report/) | Claude Code Skills 与 Subagents 技术调研 — 本质区别、场景侧重点、最佳封装形式 |
-| 22 | [claude_coding_benchmarks_report](./claude_coding_benchmarks_report/) | Anthropic Claude 编码能力评估基准调研 — 9 个主要基准的三梯队分析 |
-| 23 | [hermes_agent_analysis](./hermes_agent_analysis/) | Hermes Agent 源码深度分析报告 |
+| 21 | [anthropic_engineering_report](./anthropic_engineering_report/) | Anthropic 工程技术理论与实践研究报告 — Agent 架构、上下文工程、评估体系、MCP 协议、多智能体、安全基础设施六大主题域 |
+| 22 | [agent_teams_evaluation_report](./agent_teams_evaluation_report/) | Agent Teams / Multi-Agent AI Systems 技术评估 — 架构、优劣势、业界评价、适用场景 |
+| 23 | [skills_vs_subagents_report](./skills_vs_subagents_report/) | Claude Code Skills 与 Subagents 技术调研 — 本质区别、场景侧重点、最佳封装形式 |
+| 24 | [claude_coding_benchmarks_report](./claude_coding_benchmarks_report/) | Anthropic Claude 编码能力评估基准调研 — 9 个主要基准的三梯队分析 |
+| 25 | [hermes_agent_analysis](./hermes_agent_analysis/) | Hermes Agent 源码深度分析报告 |
 
 ---
 
@@ -75,13 +85,13 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 24 | [huawei_cloud_pay_per_use_billing](./huawei_cloud_pay_per_use_billing/) | 华为云按需计费机制分析 — 计费粒度、结算周期、扣费时间点详解 |
-| 25 | [huawei_cloud_n_project_pay_per_use_billing_settlement](./huawei_cloud_n_project_pay_per_use_billing_settlement/) | N 项目按需资源计费结算时间分析 — APIG/EIP/ELB/ModelArts/VPC-EP 五服务结算详情 |
-| 26 | [cce_pod_replica_unit_analysis](./cce_pod_replica_unit_analysis/) | 华为云 CCE Pod、实例、副本概念关系说明 |
-| 27 | [华为云云服务QPS与连接数限制报告](./华为云云服务QPS与连接数限制报告/) | 华为云各云服务（ELB/APIG/WAF/NAT/RDS/DDS/DCS/CSE/FunctionGraph）QPS 和连接数限制汇总 |
-| 28 | [ack_vs_cce_comparison](./ack_vs_cce_comparison/) | 阿里云 ACK vs 华为云 CCE 容器平台能力对比分析 |
-| 29 | [huawei_vs_aliyun_saml_iam_comparison](./huawei_vs_aliyun_saml_iam_comparison/) | 华为云 IAM vs 阿里云 RAM：SAML 联邦认证权限管控粒度对比 |
-| 30 | [huaweicloud_apig_eip_elb_architecture](./huaweicloud_apig_eip_elb_architecture/) | 华为云 APIG 挂载 EIP 与 ELB 架构分析 |
+| 26 | [huawei_cloud_pay_per_use_billing](./huawei_cloud_pay_per_use_billing/) | 华为云按需计费机制分析 — 计费粒度、结算周期、扣费时间点详解 |
+| 27 | [huawei_cloud_n_project_pay_per_use_billing_settlement](./huawei_cloud_n_project_pay_per_use_billing_settlement/) | N 项目按需资源计费结算时间分析 — APIG/EIP/ELB/ModelArts/VPC-EP 五服务结算详情 |
+| 28 | [cce_pod_replica_unit_analysis](./cce_pod_replica_unit_analysis/) | 华为云 CCE Pod、实例、副本概念关系说明 |
+| 29 | [华为云云服务QPS与连接数限制报告](./华为云云服务QPS与连接数限制报告/) | 华为云各云服务（ELB/APIG/WAF/NAT/RDS/DDS/DCS/CSE/FunctionGraph）QPS 和连接数限制汇总 |
+| 30 | [ack_vs_cce_comparison](./ack_vs_cce_comparison/) | 阿里云 ACK vs 华为云 CCE 容器平台能力对比分析 |
+| 31 | [huawei_vs_aliyun_saml_iam_comparison](./huawei_vs_aliyun_saml_iam_comparison/) | 华为云 IAM vs 阿里云 RAM：SAML 联邦认证权限管控粒度对比 |
+| 32 | [huaweicloud_apig_eip_elb_architecture](./huaweicloud_apig_eip_elb_architecture/) | 华为云 APIG 挂载 EIP 与 ELB 架构分析 |
 
 ---
 
@@ -89,10 +99,10 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 31 | [华为昇腾AI芯片对比报告_910B_910C_950](./华为昇腾AI芯片对比报告_910B_910C_950/) | 华为昇腾 910B/910C/950 芯片规格对比、技术演进与 NVIDIA 竞品对比 |
-| 32 | [huawei_ascend_cloud_servers_analysis](./huawei_ascend_cloud_servers_analysis/) | 华为云昇腾服务器种类分析 — ECS AI 加速型与 ModelArts 实例规格 |
-| 33 | [GLM4.7_deployment_solution](./GLM4.7_deployment_solution/) | 华为云 ModelArts GLM-4.7-Flash-30B-A3B 私有化部署方案 — 1300 QPS @ 24K P99 |
-| 34 | [modelarts_vs_pai_comparison](./modelarts_vs_pai_comparison/) | 华为云 ModelArts Standard vs 阿里云 PAI 平台能力对比分析 |
+| 33 | [华为昇腾AI芯片对比报告_910B_910C_950](./华为昇腾AI芯片对比报告_910B_910C_950/) | 华为昇腾 910B/910C/950 芯片规格对比、技术演进与 NVIDIA 竞品对比 |
+| 34 | [huawei_ascend_cloud_servers_analysis](./huawei_ascend_cloud_servers_analysis/) | 华为云昇腾服务器种类分析 — ECS AI 加速型与 ModelArts 实例规格 |
+| 35 | [GLM4.7_deployment_solution](./GLM4.7_deployment_solution/) | 华为云 ModelArts GLM-4.7-Flash-30B-A3B 私有化部署方案 — 1300 QPS @ 24K P99 |
+| 36 | [modelarts_vs_pai_comparison](./modelarts_vs_pai_comparison/) | 华为云 ModelArts Standard vs 阿里云 PAI 平台能力对比分析 |
 
 ---
 
@@ -100,11 +110,11 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 35 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
-| 36 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
-| 37 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
-| 38 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
-| 39 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
+| 37 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
+| 38 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
+| 39 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
+| 40 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
+| 41 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
 
 ---
 
@@ -112,8 +122,8 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 40 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
-| 41 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
+| 42 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
+| 43 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
 
 ---
 
@@ -121,9 +131,9 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 42 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
-| 43 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
-| 44 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
+| 44 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
+| 45 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
+| 46 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
 
 ---
 
@@ -131,6 +141,7 @@
 
 | 分类 | 报告数 |
 |------|--------|
+| 推理性能优化 | 2 |
 | SGLang 推理框架 | 11 |
 | vLLM 推理框架 | 5 |
 | 云存储服务对比 | 2 |
@@ -140,4 +151,4 @@
 | 开源项目分析 | 5 |
 | 大模型训练与微调 | 2 |
 | 大模型技术演进 | 3 |
-| **合计** | **44** |
+| **合计** | **46** |
