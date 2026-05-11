@@ -149,6 +149,7 @@
 | # | 目录 | 简介 |
 |---|------|------|
 | 47 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
+| 48 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
 
 ---
 
@@ -167,5 +168,5 @@
 | 大模型训练与微调 | 2 |
 | 大模型技术演进 | 3 |
 | 大模型部署方案 | 0 |
-| RL 训练系统 | 1 |
-| **合计** | **47** |
+| RL 训练系统 | 2 |
+| **合计** | **48** |
