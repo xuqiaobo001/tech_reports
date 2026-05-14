@@ -11,6 +11,7 @@
 - [AI 推理框架（SGLang）](#ai-推理框架sglang)
 - [AI 推理框架（vLLM）](#ai-推理框架vllm)
 - [云存储服务对比](#云存储服务对比)
+- [云存储迁移方案](#云存储迁移方案)
 - [AI 编码工具与 Agent](#ai-编码工具与-agent)
 - [华为云基础设施](#华为云基础设施)
 - [华为云 AI / 昇腾](#华为云-ai--昇腾)
@@ -72,15 +73,26 @@
 
 ---
 
+## 云存储迁移方案
+
+| # | 目录 | 简介 |
+|---|------|------|
+| 22 | [cpfs_5pb_ecs_sizing](./cpfs_5pb_ecs_sizing/) | 5PB 迁移方案：阿里云 ECS 传输集群规格与数量设计 — 14天全量迁移计算 |
+| 23 | [cpfs_5pb_ecs_eip_sizing_v2](./cpfs_5pb_ecs_eip_sizing_v2/) | 5PB 迁移方案：阿里云 ECS 规格与 EIP 带宽完整设计（修订版）— 单 EIP 200-500Mbit/s |
+| 24 | [cpfs_5pb_migration_with_updates](./cpfs_5pb_migration_with_updates/) | 5PB 级 CPFS 数据迁移方案：存量+并发更新场景 — 最终一致性保证 |
+| 25 | [cpfs_to_sfsturbo_migration](./cpfs_to_sfsturbo_migration/) | 阿里云 CPFS → 华为云 SFS Turbo + OBS 数据迁移方案 — 零数据丢失跨云迁移 |
+
+---
+
 ## AI 编码工具与 Agent
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 22 | [anthropic_engineering_report](./anthropic_engineering_report/) | Anthropic 工程技术理论与实践研究报告 — Agent 架构、上下文工程、评估体系、MCP 协议、多智能体、安全基础设施六大主题域 |
-| 23 | [agent_teams_evaluation_report](./agent_teams_evaluation_report/) | Agent Teams / Multi-Agent AI Systems 技术评估 — 架构、优劣势、业界评价、适用场景 |
-| 24 | [skills_vs_subagents_report](./skills_vs_subagents_report/) | Claude Code Skills 与 Subagents 技术调研 — 本质区别、场景侧重点、最佳封装形式 |
-| 25 | [claude_coding_benchmarks_report](./claude_coding_benchmarks_report/) | Anthropic Claude 编码能力评估基准调研 — 9 个主要基准的三梯队分析 |
-| 26 | [hermes_agent_analysis](./hermes_agent_analysis/) | Hermes Agent 源码深度分析报告 |
+| 26 | [anthropic_engineering_report](./anthropic_engineering_report/) | Anthropic 工程技术理论与实践研究报告 — Agent 架构、上下文工程、评估体系、MCP 协议、多智能体、安全基础设施六大主题域 |
+| 27 | [agent_teams_evaluation_report](./agent_teams_evaluation_report/) | Agent Teams / Multi-Agent AI Systems 技术评估 — 架构、优劣势、业界评价、适用场景 |
+| 28 | [skills_vs_subagents_report](./skills_vs_subagents_report/) | Claude Code Skills 与 Subagents 技术调研 — 本质区别、场景侧重点、最佳封装形式 |
+| 29 | [claude_coding_benchmarks_report](./claude_coding_benchmarks_report/) | Anthropic Claude 编码能力评估基准调研 — 9 个主要基准的三梯队分析 |
+| 30 | [hermes_agent_analysis](./hermes_agent_analysis/) | Hermes Agent 源码深度分析报告 |
 
 ---
 
@@ -88,13 +100,15 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 27 | [huawei_cloud_pay_per_use_billing](./huawei_cloud_pay_per_use_billing/) | 华为云按需计费机制分析 — 计费粒度、结算周期、扣费时间点详解 |
-| 28 | [huawei_cloud_n_project_pay_per_use_billing_settlement](./huawei_cloud_n_project_pay_per_use_billing_settlement/) | N 项目按需资源计费结算时间分析 — APIG/EIP/ELB/ModelArts/VPC-EP 五服务结算详情 |
-| 29 | [cce_pod_replica_unit_analysis](./cce_pod_replica_unit_analysis/) | 华为云 CCE Pod、实例、副本概念关系说明 |
-| 30 | [华为云云服务QPS与连接数限制报告](./华为云云服务QPS与连接数限制报告/) | 华为云各云服务（ELB/APIG/WAF/NAT/RDS/DDS/DCS/CSE/FunctionGraph）QPS 和连接数限制汇总 |
-| 31 | [ack_vs_cce_comparison](./ack_vs_cce_comparison/) | 阿里云 ACK vs 华为云 CCE 容器平台能力对比分析 |
-| 32 | [huawei_vs_aliyun_saml_iam_comparison](./huawei_vs_aliyun_saml_iam_comparison/) | 华为云 IAM vs 阿里云 RAM：SAML 联邦认证权限管控粒度对比 |
-| 33 | [huaweicloud_apig_eip_elb_architecture](./huaweicloud_apig_eip_elb_architecture/) | 华为云 APIG 挂载 EIP 与 ELB 架构分析 |
+| 31 | [huawei_cloud_pay_per_use_billing](./huawei_cloud_pay_per_use_billing/) | 华为云按需计费机制分析 — 计费粒度、结算周期、扣费时间点详解 |
+| 32 | [huawei_cloud_n_project_pay_per_use_billing_settlement](./huawei_cloud_n_project_pay_per_use_billing_settlement/) | N 项目按需资源计费结算时间分析 — APIG/EIP/ELB/ModelArts/VPC-EP 五服务结算详情 |
+| 33 | [cce_pod_replica_unit_analysis](./cce_pod_replica_unit_analysis/) | 华为云 CCE Pod、实例、副本概念关系说明 |
+| 34 | [华为云云服务QPS与连接数限制报告](./华为云云服务QPS与连接数限制报告/) | 华为云各云服务（ELB/APIG/WAF/NAT/RDS/DDS/DCS/CSE/FunctionGraph）QPS 和连接数限制汇总 |
+| 35 | [ack_vs_cce_comparison](./ack_vs_cce_comparison/) | 阿里云 ACK vs 华为云 CCE 容器平台能力对比分析 |
+| 36 | [huawei_vs_aliyun_saml_iam_comparison](./huawei_vs_aliyun_saml_iam_comparison/) | 华为云 IAM vs 阿里云 RAM：SAML 联邦认证权限管控粒度对比 |
+| 37 | [huaweicloud_apig_eip_elb_architecture](./huaweicloud_apig_eip_elb_architecture/) | 华为云 APIG 挂载 EIP 与 ELB 架构分析 |
+| 38 | [huawei_cloud_iam_saml_sso_reference](./huawei_cloud_iam_saml_sso_reference/) | 华为云 IAM SAML SSO 配置参考 — 虚拟用户 SSO 和 IAM 用户 SSO 全流程配置 |
+| 39 | [huawei_cloud_iam_saml_sso_test_cases](./huawei_cloud_iam_saml_sso_test_cases/) | 华为云 IAM SAML 单点登录对接测试用例 — 虚拟用户 SSO 和 IAM 用户 SSO 两种模式 |
 
 ---
 
@@ -102,10 +116,10 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 34 | [华为昇腾AI芯片对比报告_910B_910C_950](./华为昇腾AI芯片对比报告_910B_910C_950/) | 华为昇腾 910B/910C/950 芯片规格对比、技术演进与 NVIDIA 竞品对比 |
-| 35 | [huawei_ascend_cloud_servers_analysis](./huawei_ascend_cloud_servers_analysis/) | 华为云昇腾服务器种类分析 — ECS AI 加速型与 ModelArts 实例规格 |
-| 36 | [GLM4.7_deployment_solution](./GLM4.7_deployment_solution/) | 华为云 ModelArts GLM-4.7-Flash-30B-A3B 私有化部署方案 — 1300 QPS @ 24K P99 |
-| 37 | [modelarts_vs_pai_comparison](./modelarts_vs_pai_comparison/) | 华为云 ModelArts Standard vs 阿里云 PAI 平台能力对比分析 |
+| 40 | [华为昇腾AI芯片对比报告_910B_910C_950](./华为昇腾AI芯片对比报告_910B_910C_950/) | 华为昇腾 910B/910C/950 芯片规格对比、技术演进与 NVIDIA 竞品对比 |
+| 41 | [huawei_ascend_cloud_servers_analysis](./huawei_ascend_cloud_servers_analysis/) | 华为云昇腾服务器种类分析 — ECS AI 加速型与 ModelArts 实例规格 |
+| 42 | [GLM4.7_deployment_solution](./GLM4.7_deployment_solution/) | 华为云 ModelArts GLM-4.7-Flash-30B-A3B 私有化部署方案 — 1300 QPS @ 24K P99 |
+| 43 | [modelarts_vs_pai_comparison](./modelarts_vs_pai_comparison/) | 华为云 ModelArts Standard vs 阿里云 PAI 平台能力对比分析 |
 
 ---
 
@@ -113,11 +127,11 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 38 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
-| 39 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
-| 40 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
-| 41 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
-| 42 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
+| 44 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
+| 45 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
+| 46 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
+| 47 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
+| 48 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
 
 ---
 
@@ -125,8 +139,8 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 43 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
-| 44 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
+| 49 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
+| 50 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
 
 ---
 
@@ -134,9 +148,9 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 45 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
-| 46 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
-| 47 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
+| 51 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
+| 52 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
+| 53 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
 
 ---
 
@@ -150,8 +164,8 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 48 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
-| 49 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
+| 54 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
+| 55 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
 
 ---
 
@@ -159,7 +173,7 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 50 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
+| 56 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
 
 ---
 
@@ -171,8 +185,9 @@
 | SGLang 推理框架 | 11 |
 | vLLM 推理框架 | 5 |
 | 云存储服务对比 | 3 |
+| 云存储迁移方案 | 4 |
 | AI 编码工具与 Agent | 5 |
-| 华为云基础设施 | 7 |
+| 华为云基础设施 | 9 |
 | 华为云 AI / 昇腾 | 4 |
 | 开源项目分析 | 5 |
 | 大模型训练与微调 | 2 |
@@ -180,4 +195,4 @@
 | 视频生成大模型 | 1 |
 | 大模型部署方案 | 0 |
 | RL 训练系统 | 2 |
-| **合计** | **50** |
+| **合计** | **56** |
