@@ -110,6 +110,7 @@
 | 38 | [huawei_cloud_iam_saml_sso_reference](./huawei_cloud_iam_saml_sso_reference/) | 华为云 IAM SAML SSO 配置参考 — 虚拟用户 SSO 和 IAM 用户 SSO 全流程配置 |
 | 39 | [huawei_cloud_iam_saml_sso_test_cases](./huawei_cloud_iam_saml_sso_test_cases/) | 华为云 IAM SAML 单点登录对接测试用例 — 虚拟用户 SSO 和 IAM 用户 SSO 两种模式 |
 | 40 | [huaweicloud_dcs_redis_issues_analysis](./huaweicloud_dcs_redis_issues_analysis/) | 华为云 DCS (Redis) 客户常见问题与故障场景分析 — 15 类 TOP 问题根因与解决方案 |
+| 41 | [sfsturbo_cbr_backup_analysis](./sfsturbo_cbr_backup_analysis/) | 华为云 SFS-Turbo + CBR 备份瓶颈、约束与故障场景深度分析 — 10 大故障场景与最佳实践 |
 
 ---
 
@@ -117,12 +118,12 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 41 | [华为昇腾AI芯片对比报告_910B_910C_950](./华为昇腾AI芯片对比报告_910B_910C_950/) | 华为昇腾 910B/910C/950 芯片规格对比、技术演进与 NVIDIA 竞品对比 |
-| 42 | [huawei_ascend_cloud_servers_analysis](./huawei_ascend_cloud_servers_analysis/) | 华为云昇腾服务器种类分析 — ECS AI 加速型与 ModelArts 实例规格 |
-| 43 | [GLM4.7_deployment_solution](./GLM4.7_deployment_solution/) | 华为云 ModelArts GLM-4.7-Flash-30B-A3B 私有化部署方案 — 1300 QPS @ 24K P99 |
-| 44 | [modelarts_vs_pai_comparison](./modelarts_vs_pai_comparison/) | 华为云 ModelArts Standard vs 阿里云 PAI 平台能力对比分析 |
-| 45 | [modelarts_workspace_types_analysis](./modelarts_workspace_types_analysis/) | 华为云 ModelArts 工作空间 PUBLIC/PRIVATE/INTERNAL 三种类型权限差异、使用场景与选型决策 |
-| 46 | [modelarts_fault_recovery_panorama](./modelarts_fault_recovery_panorama/) | 华为云 ModelArts 模型训练与强化学习故障恢复能力全景分析 — 三级恢复五大策略 |
+| 42 | [华为昇腾AI芯片对比报告_910B_910C_950](./华为昇腾AI芯片对比报告_910B_910C_950/) | 华为昇腾 910B/910C/950 芯片规格对比、技术演进与 NVIDIA 竞品对比 |
+| 43 | [huawei_ascend_cloud_servers_analysis](./huawei_ascend_cloud_servers_analysis/) | 华为云昇腾服务器种类分析 — ECS AI 加速型与 ModelArts 实例规格 |
+| 44 | [GLM4.7_deployment_solution](./GLM4.7_deployment_solution/) | 华为云 ModelArts GLM-4.7-Flash-30B-A3B 私有化部署方案 — 1300 QPS @ 24K P99 |
+| 45 | [modelarts_vs_pai_comparison](./modelarts_vs_pai_comparison/) | 华为云 ModelArts Standard vs 阿里云 PAI 平台能力对比分析 |
+| 46 | [modelarts_workspace_types_analysis](./modelarts_workspace_types_analysis/) | 华为云 ModelArts 工作空间 PUBLIC/PRIVATE/INTERNAL 三种类型权限差异、使用场景与选型决策 |
+| 47 | [modelarts_fault_recovery_panorama](./modelarts_fault_recovery_panorama/) | 华为云 ModelArts 模型训练与强化学习故障恢复能力全景分析 — 三级恢复五大策略 |
 
 ---
 
@@ -130,11 +131,11 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 47 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
-| 48 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
-| 49 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
-| 50 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
-| 51 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
+| 48 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
+| 49 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
+| 50 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
+| 51 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
+| 52 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
 
 ---
 
@@ -142,8 +143,8 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 52 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
-| 53 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
+| 53 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
+| 54 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
 
 ---
 
@@ -151,9 +152,9 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 54 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
-| 55 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
-| 56 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
+| 55 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
+| 56 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
+| 57 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
 
 ---
 
@@ -167,8 +168,8 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 57 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
-| 58 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
+| 58 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
+| 59 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
 
 ---
 
@@ -176,7 +177,7 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 59 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
+| 60 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
 
 ---
 
@@ -190,7 +191,7 @@
 | 云存储服务对比 | 3 |
 | 云存储迁移方案 | 4 |
 | AI 编码工具与 Agent | 5 |
-| 华为云基础设施 | 10 |
+| 华为云基础设施 | 11 |
 | 华为云 AI / 昇腾 | 6 |
 | 开源项目分析 | 5 |
 | 大模型训练与微调 | 2 |
@@ -198,4 +199,4 @@
 | 视频生成大模型 | 1 |
 | 大模型部署方案 | 0 |
 | RL 训练系统 | 2 |
-| **合计** | **59** |
+| **合计** | **60** |
