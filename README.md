@@ -127,6 +127,7 @@
 | 48 | [modelarts_pod_vs_job_rescheduling_analysis](./modelarts_pod_vs_job_rescheduling_analysis/) | 华为云 ModelArts Pod 重调度 vs 隔离式 Job 重调度深度对比 — 设计意图、降级链路与框架适配 |
 | 49 | [modelarts_dedicated_resource_pool_quotas](./modelarts_dedicated_resource_pool_quotas/) | 华为云 ModelArts 专属资源池配额限制深度分析 — 租户级配额、物理/逻辑池、昇腾规格、工作空间 vs 资源池两套配额体系 |
 | 50 | [modelarts_npu_user_input_fault_analysis](./modelarts_npu_user_input_fault_analysis/) | 华为云 ModelArts NPU "用户输入引发"芯片故障深度分析 — 故障码 80C98002/80CB8002 根因、触发场景与排查方法 |
+| 51 | [modelarts_huge_pages_cpu_binding_analysis](./modelarts_huge_pages_cpu_binding_analysis/) | 华为云 ModelArts 大页内存与绑核深度分析 — TLB 优化、NUMA 亲和性、Host 算子下发瓶颈、协同提升 15-30% |
 
 ---
 
@@ -134,11 +135,11 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 51 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
-| 52 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
-| 53 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
-| 54 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
-| 55 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
+| 52 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
+| 53 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
+| 54 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
+| 55 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
+| 56 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
 
 ---
 
@@ -146,8 +147,8 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 56 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
-| 57 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
+| 57 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
+| 58 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
 
 ---
 
@@ -155,9 +156,9 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 58 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
-| 59 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
-| 60 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
+| 59 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
+| 60 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
+| 61 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
 
 ---
 
@@ -171,8 +172,8 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 61 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
-| 62 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
+| 62 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
+| 63 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
 
 ---
 
@@ -180,7 +181,7 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 63 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
+| 64 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
 
 ---
 
@@ -195,11 +196,11 @@
 | 云存储迁移方案 | 4 |
 | AI 编码工具与 Agent | 5 |
 | 华为云基础设施 | 11 |
-| 华为云 AI / 昇腾 | 9 |
+| 华为云 AI / 昇腾 | 10 |
 | 开源项目分析 | 5 |
 | 大模型训练与微调 | 2 |
 | 大模型技术演进 | 3 |
 | 视频生成大模型 | 1 |
 | 大模型部署方案 | 0 |
 | RL 训练系统 | 2 |
-| **合计** | **63** |
+| **合计** | **64** |
