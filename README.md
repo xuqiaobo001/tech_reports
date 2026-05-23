@@ -113,8 +113,6 @@
 | 41 | [sfsturbo_cbr_backup_analysis](./sfsturbo_cbr_backup_analysis/) | 华为云 SFS-Turbo + CBR 备份瓶颈、约束与故障场景深度分析 — 10 大故障场景与最佳实践 |
 | 42 | [ascend_npu_precision_cross_platform_analysis](./ascend_npu_precision_cross_platform_analysis/) | 昇腾 NPU 训练 + GPU 推理跨平台精度差异分析 — 舍入模式、FP8 格式不兼容、量化影响与对齐方案 |
 | 43 | [ascend_npu_benchmark_guide](./ascend_npu_benchmark_guide/) | 华为云昇腾 NPU 性能测试方案 — FP16/FP8 算力、HBM/P2P/D2D 带宽测试脚本与命令 |
-| 42 | [ascend_npu_precision_cross_platform_analysis](./ascend_npu_precision_cross_platform_analysis/) | 昇腾 NPU 训练 + GPU 推理跨平台精度差异分析 — 舍入模式、FP8 格式不兼容、量化影响与对齐方案 |
-| 43 | [ascend_npu_benchmark_guide](./ascend_npu_benchmark_guide/) | 华为云昇腾 NPU 性能测试方案 — FP16/FP8 算力、HBM/P2P/D2D 带宽测试脚本与命令 |
 
 ---
 
@@ -134,6 +132,7 @@
 | 53 | [modelarts_huge_pages_cpu_binding_analysis](./modelarts_huge_pages_cpu_binding_analysis/) | 华为云 ModelArts 大页内存与绑核深度分析 — TLB 优化、NUMA 亲和性、Host 算子下发瓶颈、协同提升 15-30% |
 | 52 | [modelarts_checkpoint_resume_training_analysis](./modelarts_checkpoint_resume_training_analysis/) | 华为云 ModelArts Standard 断点续训能力详解 — Checkpoint 机制、两种配置方式、8 大使用场景与框架适配 |
 | 53 | [modelarts_io_hang_test](./modelarts_io_hang_test/) | 华为云 ModelArts SFS Turbo IO 卡死故障注入测试方案 — 5 种故障类型、6 个测试场景、Python 级注入（含源码） |
+| 54 | [modelarts_moxing_analysis](./modelarts_moxing_analysis/) | 华为云 ModelArts Moxing 组件深度分析 — mox.file API 映射、使用场景、常见故障、与 OBS SDK/SFS Turbo 对比 |
 
 ---
 
@@ -141,11 +140,11 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 54 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
-| 55 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
-| 56 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
-| 57 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
-| 58 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
+| 55 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
+| 56 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
+| 57 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
+| 58 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
+| 59 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
 
 ---
 
