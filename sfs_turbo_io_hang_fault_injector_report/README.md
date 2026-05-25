@@ -170,7 +170,8 @@ sfs_turbo_fault_scripts/
 ├── fault-12-vpc-route-blackhole.py        # VPC 路由黑洞
 ├── fault-13-random-io-error.py            # 随机 IO 错误
 ├── fault-14-bandwidth-saturation.py       # IO 带宽打满
-└── fault-15-umount-residual.py            # umount 残留状态
+├── fault-15-umount-residual.py            # umount 残留状态
+└── business-app-filelock.py               # 业务进程模拟器（配合 fault-08 验证）
 ```
 
 #### 脚本与依赖对照表
@@ -192,6 +193,71 @@ sfs_turbo_fault_scripts/
 | fault-13 | LD_PRELOAD 注入 EIO | gcc |
 | fault-14 | tc HTB 限速 1kbit/s | iproute2 (tc) |
 | fault-15 | IO 活跃时 lazy umount | 无额外依赖 |
+| business-app-filelock | 模拟业务进程读写（配合 fault-08） | Python 内置 |
+
+#### 业务进程模拟器（business-app-filelock.py）
+
+模拟正常业务进程，尝试获取文件排他锁后进行数据读写操作，配合 fault-08 验证文件锁竞争对业务的影响。
+
+**工作流程：**
+
+1. 非阻塞尝试获取排他锁（`LOCK_EX | LOCK_NB`），超时重试
+2. 获取成功 → 读取文件最后 10 个字符 → 写入时间戳和随机文字 → 释放锁
+3. 获取失败 → 打印超时信息，**不会卡死**，等待下一轮重试
+4. 随机等待 3~8 秒后进入下一轮循环
+5. 默认运行 1 小时后退出，打印统计信息
+
+**关键设计：** 使用 `LOCK_NB`（非阻塞模式），即使锁被其他进程持有也不会卡死在 `flock()` 调用上，可以持续运行并观察故障影响。
+
+```bash
+# 默认运行 1 小时
+sudo python3 business-app-filelock.py --mount-point /mnt/sfs_turbo
+
+# 自定义运行 2 小时
+sudo python3 business-app-filelock.py --mount-point /mnt/sfs_turbo --runtime 7200
+
+# 自定义锁超时 5 秒
+sudo python3 business-app-filelock.py --mount-point /mnt/sfs_turbo --lock-timeout 5
+```
+
+**配合 fault-08 演练示例：**
+
+```bash
+# 终端 1: 启动业务进程模拟器（正常运行）
+sudo python3 business-app-filelock.py --mount-point /mnt/sfs_turbo --runtime 3600
+# 正常输出:
+#   [10:30:01] 第 1 轮 | 剩余 3599s | 尝试获取锁... 成功 (耗时 0.0s)
+#           读取尾部: ...<空文件>
+#           写入数据: [2026-05-24 10:30:01] PID=12345 data=aB3xKp9mN2qR
+
+# 终端 2: 注入 fault-08 文件锁竞争故障
+sudo python3 fault-08-file-lock-deadlock.py --mount-point /mnt/sfs_turbo
+
+# 回到终端 1: 观察业务受影响情况
+# 锁获取开始超时:
+#   [10:31:15] 第 15 轮 | 剩余 3525s | 尝试获取锁... 获取失败 (耗时 10.0s, 累计超时 1 次)
+#   [10:31:28] 第 16 轮 | 剩余 3512s | 尝试获取锁... 获取失败 (耗时 10.0s, 累计超时 2 次)
+
+# 终端 3: 清理故障
+sudo python3 fault-08-file-lock-deadlock.py --cleanup --mount-point /mnt/sfs_turbo
+
+# 回到终端 1: 业务恢复正常
+#   [10:32:01] 第 20 轮 | 剩余 3479s | 尝试获取锁... 成功 (耗时 0.0s)
+```
+
+**运行结束统计输出：**
+
+```
+============================================================
+  运行统计
+  总运行时间:  3600 秒 (60.0 分钟)
+  总循环次数:  420
+  获取锁成功:  380 次
+  获取锁超时:  40 次
+  异常次数:    0 次
+  锁获取成功率: 90.5%
+============================================================
+```
 
 #### 独立脚本使用方式
 
