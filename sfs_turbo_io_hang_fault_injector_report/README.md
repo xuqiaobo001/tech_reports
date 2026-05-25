@@ -145,6 +145,141 @@
 
 ## 使用方法
 
+本项目提供两种使用方式：**独立脚本**（推荐）和 **一体化工具备**。
+
+### 方式一：独立故障注入脚本（推荐）
+
+每个故障场景对应一个独立的 Python 脚本，可直接在已挂载 SFS Turbo 的 ECS 上运行，无需额外安装。
+
+#### 脚本目录结构
+
+```
+sfs_turbo_fault_scripts/
+├── common.py                              # 公共库（所有脚本共用）
+├── fault-01-nfs-hard-mount-hang.py        # NFS hard mount D-state 卡死
+├── fault-02-network-latency.py            # 网络延迟注入
+├── fault-03-network-packet-loss.py        # 网络丢包注入
+├── fault-04-nfs-port-block.py             # NFS 端口阻断
+├── fault-05-disk-full.py                  # 磁盘容量耗尽
+├── fault-06-inode-exhaustion.py           # Inode 耗尽
+├── fault-07-iops-pressure.py              # IOPS 压力打满
+├── fault-08-file-lock-deadlock.py         # 文件锁竞争死锁
+├── fault-09-stale-file-handle.py          # Stale file handle
+├── fault-10-concurrent-connections.py     # 并发连接压力
+├── fault-11-dns-failure.py                # DNS 解析故障
+├── fault-12-vpc-route-blackhole.py        # VPC 路由黑洞
+├── fault-13-random-io-error.py            # 随机 IO 错误
+├── fault-14-bandwidth-saturation.py       # IO 带宽打满
+└── fault-15-umount-residual.py            # umount 残留状态
+```
+
+#### 脚本与依赖对照表
+
+| 脚本 | 注入原理 | 系统依赖 |
+|------|---------|---------|
+| fault-01 | iptables DROP 全部流量 | iptables |
+| fault-02 | tc netem 延迟 1000ms±500ms | iproute2 (tc) |
+| fault-03 | tc netem 丢包 50% | iproute2 (tc) |
+| fault-04 | iptables DROP NFS 端口 | iptables |
+| fault-05 | dd 填满磁盘 | 无额外依赖 |
+| fault-06 | touch 批量创建空文件 | 无额外依赖 |
+| fault-07 | 多线程 4K 随机 IO | fio（可选，备选 dd） |
+| fault-08 | flock 排他锁竞争 | Python 内置 |
+| fault-09 | 删除已打开的文件 | Python 内置 |
+| fault-10 | 200+ TCP 连接 | Python 内置 |
+| fault-11 | 替换 resolv.conf | 无额外依赖 |
+| fault-12 | ip route blackhole | iproute2 |
+| fault-13 | LD_PRELOAD 注入 EIO | gcc |
+| fault-14 | tc HTB 限速 1kbit/s | iproute2 (tc) |
+| fault-15 | IO 活跃时 lazy umount | 无额外依赖 |
+
+#### 独立脚本使用方式
+
+所有脚本遵循统一的参数规范：
+
+```bash
+# 注入故障（需 sudo）
+sudo python3 fault-01-nfs-hard-mount-hang.py --mount-point /mnt/sfs_turbo
+
+# 注入故障并定时自动恢复（60 秒后）
+sudo python3 fault-02-network-latency.py --mount-point /mnt/sfs_turbo --duration 60
+
+# 手动恢复/清理故障
+sudo python3 fault-01-nfs-hard-mount-hang.py --cleanup --mount-point /mnt/sfs_turbo
+```
+
+各脚本特有参数：
+- `fault-10`: 额外支持 `--count 200` 指定并发连接数
+
+#### 典型演练示例
+
+```bash
+# === 示例 1: 模拟 NFS 后端完全不可达 (fault-01) ===
+
+# 终端 1: 注入故障
+sudo python3 fault-01-nfs-hard-mount-hang.py --mount-point /mnt/sfs_turbo --duration 120
+
+# 终端 2: 观察 D-state 进程
+watch -n 1 'ps aux | awk "\$8~/D/"'
+ls /mnt/sfs_turbo   # 会卡住
+
+# 120 秒后自动恢复
+
+# === 示例 2: 模拟网络丢包导致 NFS 重传 (fault-03) ===
+
+# 终端 1: 注入故障
+sudo python3 fault-03-network-packet-loss.py --mount-point /mnt/sfs_turbo --duration 60
+
+# 终端 2: 观察 NFS 重传统计
+watch -n 1 'nfsstat -c | grep retrans'
+time dd if=/dev/zero of=/mnt/sfs_turbo/test bs=1M count=10 oflag=direct
+
+# === 示例 3: 模拟磁盘满导致写入失败 (fault-05) ===
+
+# 注入
+sudo python3 fault-05-disk-full.py --mount-point /mnt/sfs_turbo
+
+# 验证
+df -h /mnt/sfs_turbo
+touch /mnt/sfs_turbo/test_file  # No space left on device
+
+# 恢复
+sudo python3 fault-05-disk-full.py --cleanup --mount-point /mnt/sfs_turbo
+
+# === 示例 4: 模拟随机 IO 错误 (fault-13) ===
+
+# 注入（编译 LD_PRELOAD 库）
+sudo python3 fault-13-random-io-error.py --mount-point /mnt/sfs_turbo
+
+# 使用注入库运行程序
+LD_PRELOAD=/tmp/sfs_fault_ldpreload/fault_inject.so cp /etc/hosts /mnt/sfs_turbo/test_copy
+# 约 10% 概率遇到 "Input/output error"
+
+# 清理
+sudo python3 fault-13-random-io-error.py --cleanup --mount-point /mnt/sfs_turbo
+```
+
+### 方式二：一体化工具
+
+集成版脚本 `sfs_turbo_io_hang_fault_injector.py` 包含全部 15 个故障场景，通过参数选择注入。
+
+```bash
+# 查看所有故障场景
+python3 sfs_turbo_io_hang_fault_injector.py --list
+
+# 注入指定故障
+sudo python3 sfs_turbo_io_hang_fault_injector.py --inject fault-01 --mount-point /mnt/sfs_turbo
+
+# 注入并设置自动恢复时间
+sudo python3 sfs_turbo_io_hang_fault_injector.py --inject fault-02 --mount-point /mnt/sfs_turbo --duration 60
+
+# 清理指定故障
+sudo python3 sfs_turbo_io_hang_fault_injector.py --cleanup fault-01
+
+# 清理所有活跃故障
+sudo python3 sfs_turbo_io_hang_fault_injector.py --cleanup all
+```
+
 ### 环境要求
 
 - Linux ECS 实例（已挂载 SFS Turbo）
@@ -155,43 +290,6 @@
   - `tc` (iproute2) — fault-02, fault-03, fault-14
   - `gcc` — fault-13
   - `fio`（可选）— fault-07
-
-### 基本用法
-
-```bash
-# 查看所有故障场景
-python3 sfs_turbo_io_hang_fault_injector.py --list
-
-# 注入指定故障（需 sudo）
-sudo python3 sfs_turbo_io_hang_fault_injector.py --inject fault-01 --mount-point /mnt/sfs_turbo
-
-# 注入故障并设置自动恢复时间（60 秒）
-sudo python3 sfs_turbo_io_hang_fault_injector.py --inject fault-02 --mount-point /mnt/sfs_turbo --duration 60
-
-# 清理指定故障
-sudo python3 sfs_turbo_io_hang_fault_injector.py --cleanup fault-01
-
-# 清理所有活跃故障
-sudo python3 sfs_turbo_io_hang_fault_injector.py --cleanup all
-```
-
-### 典型演练流程
-
-```bash
-# 1. 确认 SFS Turbo 已挂载
-mount | grep nfs
-
-# 2. 注入网络丢包故障
-sudo python3 sfs_turbo_io_hang_fault_injector.py --inject fault-03 --mount-point /mnt/sfs_turbo --duration 120
-
-# 3. 在另一个终端观察影响
-watch -n 1 'nfsstat -c | grep retrans'
-ls /mnt/sfs_turbo  # 可能卡住
-time dd if=/dev/zero of=/mnt/sfs_turbo/test bs=1M count=10 oflag=direct
-
-# 4. 故障 120 秒后自动恢复（或手动 cleanup）
-sudo python3 sfs_turbo_io_hang_fault_injector.py --cleanup fault-03
-```
 
 ## 安全设计
 

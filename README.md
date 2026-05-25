@@ -180,6 +180,7 @@
 |---|------|------|
 | 66 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
 | 67 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
+| 68 | [ray_vs_pytorch_ddp_pod_recovery_analysis](./ray_vs_pytorch_ddp_pod_recovery_analysis/) | Ray RL vs PyTorch DDP 故障恢复机制深度对比 — 五大架构差异解析，Ray Pod 级恢复 vs DDP Job 级重建根因分析 |
 
 ---
 
