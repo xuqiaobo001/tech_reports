@@ -171,7 +171,13 @@ sfs_turbo_fault_scripts/
 ├── fault-13-random-io-error.py            # 随机 IO 错误
 ├── fault-14-bandwidth-saturation.py       # IO 带宽打满
 ├── fault-15-umount-residual.py            # umount 残留状态
-└── business-app-filelock.py               # 业务进程模拟器（配合 fault-08 验证）
+├── business-app-filelock.py               # 业务进程模拟器（配合 fault-08 验证）
+├── pio-fault-01-ldpreload-full-error.py   # LD_PRELOAD 全量 I/O 错误注入
+├── pio-fault-02-ptrace-syscall.py         # ptrace 系统调用拦截注入
+├── pio-fault-03-cgroups-io-throttle.py    # cgroups v2 I/O 限流禁止
+├── pio-fault-04-strace-inject.py          # strace 故障注入启动器
+├── pio-fault-05-pidfd-send-signal.py      # 进程冻结/FD 关闭
+└── pio-fault-06-ebpf-io-error.py          # eBPF I/O 错误注入
 ```
 
 #### 脚本与依赖对照表
@@ -389,6 +395,134 @@ sudo python3 sfs_turbo_io_hang_fault_injector.py --cleanup all
 | 容量/配额 | 2 | fault-05, fault-06 |
 | DNS | 1 | fault-11 |
 | IO 错误 | 1 | fault-13 |
+
+## 进程级 I/O 故障注入 (pio-fault)
+
+除了面向 SFS Turbo 文件系统级别的故障注入（fault-01~15），本工具集还提供**进程级** I/O 故障注入脚本（pio-fault-01~06），可精确控制目标进程的 I/O 行为，不影响系统其他进程。
+
+### pio-fault 总览
+
+| ID | 故障名称 | 注入原理 | 可附加运行中进程 | 性能开销 | 系统依赖 |
+|---|---------|---------|:---:|:---:|------|
+| pio-fault-01 | LD_PRELOAD 全量 I/O 错误 | 用户态库注入拦截 libc 函数 | 否 | 极低 | gcc |
+| pio-fault-02 | ptrace 系统调用拦截 | ptrace 附加 + 修改寄存器返回值 | 是 | 极高 (10-100x) | Python ctypes |
+| pio-fault-03 | cgroups v2 I/O 限流禁止 | 内核 I/O 调度层设置 bw/iops=0 | 是 | 极低 | cgroups v2 |
+| pio-fault-04 | strace 故障注入启动器 | strace -e inject 内置功能 | 否 | 中 (2-10x) | strace >= 4.15 |
+| pio-fault-05 | 进程冻结/FD 关闭 | SIGSTOP / gdb 关闭 fd | 是 | 无 | gdb (关闭fd时) |
+| pio-fault-06 | eBPF I/O 错误注入 | 内核 eBPF 修改 syscall 返回值 | 是 | 低 (1-5%) | BCC + 内核 4.7+ |
+
+### pio-fault-01: LD_PRELOAD 全量 I/O 错误
+
+编译 C 共享库 (.so)，通过 LD_PRELOAD 环境变量注入到目标进程，在用户态拦截 libc 的全部 I/O 函数（read/write/open/close/fsync/stat/mkdir/unlink/rename/chmod）并返回指定错误。
+
+```bash
+# 注入（编译注入库）
+sudo python3 pio-fault-01-ldpreload-full-error.py --mount-point /mnt/sfs_turbo
+
+# 使用 — 100% 全部 I/O 返回 EIO
+LD_PRELOAD=/tmp/sfs_fault_pio_01/full_io_error.so cp /etc/hosts /mnt/sfs_turbo/test
+
+# 指定错误类型和失败率
+sudo python3 pio-fault-01-ldpreload-full-error.py --error-type enospc --fail-rate 50
+
+# 清理
+sudo python3 pio-fault-01-ldpreload-full-error.py --cleanup
+```
+
+支持错误类型: `eio` / `eacces` / `emfile` / `enospc` / `enoent` / `enotdir`
+
+### pio-fault-02: ptrace 系统调用拦截
+
+利用 ptrace PTRACE_SYSCALL 模式附加到运行中进程，在每次系统调用退出时修改返回寄存器为错误码。可拦截直接 syscall 指令调用（静态编译程序也有效）。
+
+```bash
+# 附加到运行中进程
+sudo python3 pio-fault-02-ptrace-syscall.py --pid 12345
+
+# 指定错误和失败率
+sudo python3 pio-fault-02-ptrace-syscall.py --pid 12345 --error-type eacces --fail-rate 50
+
+# Ctrl+C 停止后自动 detach
+```
+
+### pio-fault-03: cgroups v2 I/O 限流禁止
+
+将目标进程移入专用 cgroup，设置 io.max 的 rbytes/wbytes/riops/wiops 为 0，内核在 I/O 调度层直接拒绝该 cgroup 的所有 I/O 请求。
+
+```bash
+# 禁止进程 I/O（自动检测块设备）
+sudo python3 pio-fault-03-cgroups-io-throttle.py --pid 12345
+
+# 指定块设备
+sudo python3 pio-fault-03-cgroups-io-throttle.py --pid 12345 --device sda1
+
+# 恢复
+sudo python3 pio-fault-03-cgroups-io-throttle.py --cleanup
+```
+
+### pio-fault-04: strace 故障注入启动器
+
+利用 strace 内置的 `-e inject` 功能，在系统调用级别注入 I/O 错误。无需编写 C 代码，一行命令搞定。
+
+```bash
+# 全部 I/O 返回 EIO
+sudo python3 pio-fault-04-strace-inject.py --error-type eio -- cp /etc/hosts /mnt/sfs_turbo/test
+
+# 50% 概率返回 ENOSPC
+sudo python3 pio-fault-04-strace-inject.py --error-type enospc --fail-rate 50 -- \
+    dd if=/dev/zero of=/mnt/sfs_turbo/test bs=1M count=100
+```
+
+### pio-fault-05: 进程冻结 / 文件描述符关闭
+
+三种子方式：
+- `stop` — SIGSTOP 冻结整个进程（可 SIGCONT 恢复）
+- `close-fd` — 关闭指定 fd（不可逆，后续 I/O 返回 EBADF）
+- `close-nfs-fds` — 关闭所有 NFS 相关 fd
+
+```bash
+# 冻结进程
+sudo python3 pio-fault-05-pidfd-send-signal.py --pid 12345 --method stop
+
+# 关闭指定 fd
+sudo python3 pio-fault-05-pidfd-send-signal.py --pid 12345 --method close-fd --fd 3,4,5
+
+# 关闭所有 NFS fd
+sudo python3 pio-fault-05-pidfd-send-signal.py --pid 12345 --method close-nfs-fds
+
+# 恢复（SIGSTOP 方式可恢复，关闭 fd 不可逆）
+sudo python3 pio-fault-05-pidfd-send-signal.py --cleanup
+```
+
+### pio-fault-06: eBPF I/O 错误注入
+
+加载 eBPF 程序到内核，挂载到 syscalls:sys_exit_read/write/openat 等追踪点，当目标 PID 的系统调用返回时修改返回寄存器为 -errno。性能开销极低（约 1-5%），是附加运行中进程的最优方案。
+
+```bash
+# 注入到运行中进程
+sudo python3 pio-fault-06-ebpf-io-error.py --pid 12345
+
+# 50% 失败率
+sudo python3 pio-fault-06-ebpf-io-error.py --pid 12345 --fail-rate 50
+
+# Ctrl+C 停止后 eBPF 程序自动卸载
+```
+
+需要安装 BCC: `apt install -y bpfcc-tools python3-bpfcc linux-headers-$(uname -r)`
+
+### pio-fault 选型决策树
+
+```
+能否重启目标进程？
+├── 是 → 追求简单？ → pio-fault-04 (strace)
+│       └── 追求低开销？ → pio-fault-01 (LD_PRELOAD)
+└── 否 → 环境有 BCC？
+        ├── 是 → pio-fault-06 (eBPF) ← 最优
+        └── 否 → 需要拦截直接 syscall？
+                ├── 是 → pio-fault-02 (ptrace) ← 性能代价大
+                └── 否 → pio-fault-03 (cgroups) ← NFS 效果有限
+                         或 pio-fault-05 (SIGSTOP) ← 冻结整个进程
+```
 
 ## 推荐的 SFS Turbo 挂载参数
 
