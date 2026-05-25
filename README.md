@@ -152,9 +152,9 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 59 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
-| 60 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
-| 61 | [linux_dirty_pages_training_impact_analysis](./linux_dirty_pages_training_impact_analysis/) | Linux vm.dirty_background_bytes 对大模型训练性能的影响 — Checkpoint 保存、SFS Turbo 挂载、调优建议 |
+| 60 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
+| 61 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
+| 62 | [linux_dirty_pages_training_impact_analysis](./linux_dirty_pages_training_impact_analysis/) | Linux vm.dirty_background_bytes 对大模型训练性能的影响 — Checkpoint 保存、SFS Turbo 挂载、调优建议 |
 
 ---
 
@@ -162,9 +162,9 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 62 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
-| 63 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
-| 64 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
+| 63 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
+| 64 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
+| 65 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
 
 ---
 
@@ -178,8 +178,8 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 65 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
-| 66 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
+| 66 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
+| 67 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
 
 ---
 
@@ -187,7 +187,7 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 67 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
+| 68 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
 
 ---
 
@@ -202,11 +202,11 @@
 | 云存储迁移方案 | 4 |
 | AI 编码工具与 Agent | 5 |
 | 华为云基础设施 | 13 |
-| 华为云 AI / 昇腾 | 12 |
+| 华为云 AI / 昇腾 | 14 |
 | 开源项目分析 | 5 |
 | 大模型训练与微调 | 3 |
 | 大模型技术演进 | 3 |
 | 视频生成大模型 | 1 |
 | 大模型部署方案 | 0 |
 | RL 训练系统 | 2 |
-| **合计** | **69** |
+| **合计** | **68** |
