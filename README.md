@@ -113,6 +113,7 @@
 | 41 | [sfsturbo_cbr_backup_analysis](./sfsturbo_cbr_backup_analysis/) | 华为云 SFS-Turbo + CBR 备份瓶颈、约束与故障场景深度分析 — 10 大故障场景与最佳实践 |
 | 42 | [ascend_npu_precision_cross_platform_analysis](./ascend_npu_precision_cross_platform_analysis/) | 昇腾 NPU 训练 + GPU 推理跨平台精度差异分析 — 舍入模式、FP8 格式不兼容、量化影响与对齐方案 |
 | 43 | [ascend_npu_benchmark_guide](./ascend_npu_benchmark_guide/) | 华为云昇腾 NPU 性能测试方案 — FP16/FP8 算力、HBM/P2P/D2D 带宽测试脚本与命令 |
+| 44 | [ascend_npu_training_hang_analysis](./ascend_npu_training_hang_analysis/) | 昇腾 NPU 大模型训练常见卡死原因与处理方式 — 10 大类卡死场景、HCCL/HBM/DataLoader/网络/算子/同步/IO 全覆盖 |
 
 ---
 
@@ -120,19 +121,19 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 44 | [华为昇腾AI芯片对比报告_910B_910C_950](./华为昇腾AI芯片对比报告_910B_910C_950/) | 华为昇腾 910B/910C/950 芯片规格对比、技术演进与 NVIDIA 竞品对比 |
-| 45 | [huawei_ascend_cloud_servers_analysis](./huawei_ascend_cloud_servers_analysis/) | 华为云昇腾服务器种类分析 — ECS AI 加速型与 ModelArts 实例规格 |
-| 46 | [GLM4.7_deployment_solution](./GLM4.7_deployment_solution/) | 华为云 ModelArts GLM-4.7-Flash-30B-A3B 私有化部署方案 — 1300 QPS @ 24K P99 |
-| 47 | [modelarts_vs_pai_comparison](./modelarts_vs_pai_comparison/) | 华为云 ModelArts Standard vs 阿里云 PAI 平台能力对比分析 |
-| 48 | [modelarts_workspace_types_analysis](./modelarts_workspace_types_analysis/) | 华为云 ModelArts 工作空间 PUBLIC/PRIVATE/INTERNAL 三种类型权限差异、使用场景与选型决策 |
-| 49 | [modelarts_fault_recovery_panorama](./modelarts_fault_recovery_panorama/) | 华为云 ModelArts 模型训练与强化学习故障恢复能力全景分析 — 三级恢复五大策略 |
-| 50 | [modelarts_pod_vs_job_rescheduling_analysis](./modelarts_pod_vs_job_rescheduling_analysis/) | 华为云 ModelArts Pod 重调度 vs 隔离式 Job 重调度深度对比 — 设计意图、降级链路与框架适配 |
-| 51 | [modelarts_dedicated_resource_pool_quotas](./modelarts_dedicated_resource_pool_quotas/) | 华为云 ModelArts 专属资源池配额限制深度分析 — 租户级配额、物理/逻辑池、昇腾规格、工作空间 vs 资源池两套配额体系 |
-| 52 | [modelarts_npu_user_input_fault_analysis](./modelarts_npu_user_input_fault_analysis/) | 华为云 ModelArts NPU "用户输入引发"芯片故障深度分析 — 故障码 80C98002/80CB8002 根因、触发场景与排查方法 |
-| 53 | [modelarts_huge_pages_cpu_binding_analysis](./modelarts_huge_pages_cpu_binding_analysis/) | 华为云 ModelArts 大页内存与绑核深度分析 — TLB 优化、NUMA 亲和性、Host 算子下发瓶颈、协同提升 15-30% |
-| 54 | [modelarts_checkpoint_resume_training_analysis](./modelarts_checkpoint_resume_training_analysis/) | 华为云 ModelArts Standard 断点续训能力详解 — Checkpoint 机制、两种配置方式、8 大使用场景与框架适配 |
-| 55 | [modelarts_io_hang_test](./modelarts_io_hang_test/) | 华为云 ModelArts SFS Turbo IO 卡死故障注入测试方案 — 5 种故障类型、6 个测试场景、Python 级注入（含源码） |
-| 56 | [modelarts_moxing_analysis](./modelarts_moxing_analysis/) | 华为云 ModelArts Moxing 组件深度分析 — mox.file API 映射、使用场景、常见故障、与 OBS SDK/SFS Turbo 对比 |
+| 45 | [华为昇腾AI芯片对比报告_910B_910C_950](./华为昇腾AI芯片对比报告_910B_910C_950/) | 华为昇腾 910B/910C/950 芯片规格对比、技术演进与 NVIDIA 竞品对比 |
+| 46 | [huawei_ascend_cloud_servers_analysis](./huawei_ascend_cloud_servers_analysis/) | 华为云昇腾服务器种类分析 — ECS AI 加速型与 ModelArts 实例规格 |
+| 47 | [GLM4.7_deployment_solution](./GLM4.7_deployment_solution/) | 华为云 ModelArts GLM-4.7-Flash-30B-A3B 私有化部署方案 — 1300 QPS @ 24K P99 |
+| 48 | [modelarts_vs_pai_comparison](./modelarts_vs_pai_comparison/) | 华为云 ModelArts Standard vs 阿里云 PAI 平台能力对比分析 |
+| 49 | [modelarts_workspace_types_analysis](./modelarts_workspace_types_analysis/) | 华为云 ModelArts 工作空间 PUBLIC/PRIVATE/INTERNAL 三种类型权限差异、使用场景与选型决策 |
+| 50 | [modelarts_fault_recovery_panorama](./modelarts_fault_recovery_panorama/) | 华为云 ModelArts 模型训练与强化学习故障恢复能力全景分析 — 三级恢复五大策略 |
+| 51 | [modelarts_pod_vs_job_rescheduling_analysis](./modelarts_pod_vs_job_rescheduling_analysis/) | 华为云 ModelArts Pod 重调度 vs 隔离式 Job 重调度深度对比 — 设计意图、降级链路与框架适配 |
+| 52 | [modelarts_dedicated_resource_pool_quotas](./modelarts_dedicated_resource_pool_quotas/) | 华为云 ModelArts 专属资源池配额限制深度分析 — 租户级配额、物理/逻辑池、昇腾规格、工作空间 vs 资源池两套配额体系 |
+| 53 | [modelarts_npu_user_input_fault_analysis](./modelarts_npu_user_input_fault_analysis/) | 华为云 ModelArts NPU "用户输入引发"芯片故障深度分析 — 故障码 80C98002/80CB8002 根因、触发场景与排查方法 |
+| 54 | [modelarts_huge_pages_cpu_binding_analysis](./modelarts_huge_pages_cpu_binding_analysis/) | 华为云 ModelArts 大页内存与绑核深度分析 — TLB 优化、NUMA 亲和性、Host 算子下发瓶颈、协同提升 15-30% |
+| 55 | [modelarts_checkpoint_resume_training_analysis](./modelarts_checkpoint_resume_training_analysis/) | 华为云 ModelArts Standard 断点续训能力详解 — Checkpoint 机制、两种配置方式、8 大使用场景与框架适配 |
+| 56 | [modelarts_io_hang_test](./modelarts_io_hang_test/) | 华为云 ModelArts SFS Turbo IO 卡死故障注入测试方案 — 5 种故障类型、6 个测试场景、Python 级注入（含源码） |
+| 57 | [modelarts_moxing_analysis](./modelarts_moxing_analysis/) | 华为云 ModelArts Moxing 组件深度分析 — mox.file API 映射、使用场景、常见故障、与 OBS SDK/SFS Turbo 对比 |
 
 ---
 
@@ -140,11 +141,11 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 57 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
-| 58 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
-| 59 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
-| 60 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
-| 61 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
+| 58 | [openclaw_architecture_report](./openclaw_architecture_report/) | OpenClaw 源码架构分析 — 本地优先个人 AI 助手网关，插件化多通道架构 |
+| 59 | [openclaw_skills_report](./openclaw_skills_report/) | OpenClaw 内置 68 个 Skills 完整分析 — 分类、功能详解与架构模式 |
+| 60 | [opencode](./opencode/) | OpenCode 架构分析合集 — 整体架构、PTY 机制、Server API、与 Claude Code 对比（4 篇） |
+| 61 | [openspec](./openspec/) | OpenSpec 开源项目分析 — AI 原生规范驱动开发系统 |
+| 62 | [harbor](./harbor/) | Harbor Framework 源码架构深度分析合集 — 运行逻辑、并行执行、容器架构、CCE 适配（4 篇） |
 
 ---
 
@@ -152,9 +153,9 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 62 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
-| 63 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
-| 64 | [linux_dirty_pages_training_impact_analysis](./linux_dirty_pages_training_impact_analysis/) | Linux vm.dirty_background_bytes 对大模型训练性能的影响 — Checkpoint 保存、SFS Turbo 挂载、调优建议 |
+| 63 | [llamafactory_data_loading_analysis](./llamafactory_data_loading_analysis/) | LLaMA-Factory SFT 训练数据集加载机制深度分析 |
+| 64 | [sft_training_logging_report](./sft_training_logging_report/) | LLaMA-Factory SFT 训练关键日志信息报告 |
+| 65 | [linux_dirty_pages_training_impact_analysis](./linux_dirty_pages_training_impact_analysis/) | Linux vm.dirty_background_bytes 对大模型训练性能的影响 — Checkpoint 保存、SFS Turbo 挂载、调优建议 |
 
 ---
 
@@ -162,9 +163,9 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 65 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
-| 66 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
-| 67 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
+| 66 | [DeepSeek_核心技术演进分析报告](./DeepSeek_核心技术演进分析报告/) | 基于 DeepSeek V3、V3.2、V4 三份技术报告的横向对比分析 |
+| 67 | [残差变换与mHC详解](./残差变换与mHC详解/) | 基于 DeepSeek V3/V4 技术报告中残差连接机制的通俗解读 |
+| 68 | [mHC双随机矩阵非膨胀原理详解](./mHC双随机矩阵非膨胀原理详解/) | DeepSeek V4 流形约束超连接中双随机矩阵保证残差变换不膨胀的原理分析 |
 
 ---
 
@@ -178,9 +179,9 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 68 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
-| 69 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
-| 70 | [ray_vs_pytorch_ddp_pod_recovery_analysis](./ray_vs_pytorch_ddp_pod_recovery_analysis/) | Ray RL vs PyTorch DDP 故障恢复机制深度对比 — 五大架构差异解析，Ray Pod 级恢复 vs DDP Job 级重建根因分析 |
+| 69 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
+| 70 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
+| 71 | [ray_vs_pytorch_ddp_pod_recovery_analysis](./ray_vs_pytorch_ddp_pod_recovery_analysis/) | Ray RL vs PyTorch DDP 故障恢复机制深度对比 — 五大架构差异解析，Ray Pod 级恢复 vs DDP Job 级重建根因分析 |
 
 ---
 
@@ -188,7 +189,7 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 71 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
+| 72 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
 
 ---
 
@@ -202,7 +203,7 @@
 | 云存储服务对比 | 3 |
 | 云存储迁移方案 | 4 |
 | AI 编码工具与 Agent | 5 |
-| 华为云基础设施 | 13 |
+| 华为云基础设施 | 14 |
 | 华为云 AI / 昇腾 | 14 |
 | 开源项目分析 | 5 |
 | 大模型训练与微调 | 3 |
@@ -210,4 +211,4 @@
 | 视频生成大模型 | 1 |
 | 大模型部署方案 | 0 |
 | RL 训练系统 | 3 |
-| **合计** | **71** |
+| **合计** | **72** |
