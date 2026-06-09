@@ -6,6 +6,119 @@
 
 ---
 
+## 测试用例总览
+
+> 共 **5 大场景、72 个用例**，覆盖顺序/随机读写、IOPS 峰值、带宽峰值等核心性能指标。
+
+### 场景一：单客户端全覆盖测试（48 个用例）
+
+> 测试目标：在单个客户端上覆盖 4 种读写类型 × 3 种并发 × 4 种对象大小的全组合，验证 OBS 基础读写功能正确性与不同负载下的性能基线。
+
+| 用例编号 | 读写类型 | 对象大小 | 并发数 | 测试点 | config 关键配置 |
+|:--------:|:-------:|:-------:|:------:|-------|---------------|
+| S1-SEQ-W-4K-1 | 顺序写 | 4KB | 1 | 单线程顺序写入 4KB 对象，验证 PutObject 字典序命名、TPS 基线 | `Testcase=201, ObjectLexical=true` |
+| S1-SEQ-W-4K-10 | 顺序写 | 4KB | 10 | 10 并发顺序写 4KB，验证并发线性扩展能力 | `ThreadsPerUser=10` |
+| S1-SEQ-W-4K-100 | 顺序写 | 4KB | 100 | 100 并发顺序写 4KB，验证单客户端高并发写 TPS 上限 | `ThreadsPerUser=100` |
+| S1-SEQ-W-32K-1 | 顺序写 | 32KB | 1 | 单线程顺序写入 32KB 对象，对比 4KB 的 TPS 与吞吐差异 | `ObjectSize=32768` |
+| S1-SEQ-W-32K-10 | 顺序写 | 32KB | 10 | 10 并发顺序写 32KB，验证中等块大小的并发扩展性 | `ObjectSize=32768, ThreadsPerUser=10` |
+| S1-SEQ-W-32K-100 | 顺序写 | 32KB | 100 | 100 并发顺序写 32KB，验证 32KB 写 TPS 上限 | `ObjectSize=32768, ThreadsPerUser=100` |
+| S1-SEQ-W-1M-1 | 顺序写 | 1MB | 1 | 单线程顺序写入 1MB 对象，验证大对象写入延迟和吞吐基线 | `ObjectSize=1048576` |
+| S1-SEQ-W-1M-10 | 顺序写 | 1MB | 10 | 10 并发顺序写 1MB，验证大对象并发写吞吐扩展 | `ObjectSize=1048576, ThreadsPerUser=10` |
+| S1-SEQ-W-1M-100 | 顺序写 | 1MB | 100 | 100 并发顺序写 1MB，验证大对象高并发写吞吐上限 | `ObjectSize=1048576, ThreadsPerUser=100` |
+| S1-SEQ-W-4M-1 | 顺序写 | 4MB | 1 | 单线程顺序写入 4MB 对象，验证最大块写入延迟 | `ObjectSize=4194304` |
+| S1-SEQ-W-4M-10 | 顺序写 | 4MB | 10 | 10 并发顺序写 4MB，验证 4MB 并发写吞吐 | `ObjectSize=4194304, ThreadsPerUser=10` |
+| S1-SEQ-W-4M-100 | 顺序写 | 4MB | 100 | 100 并发顺序写 4MB，验证最大块高并发写吞吐上限 | `ObjectSize=4194304, ThreadsPerUser=100` |
+| S1-RAND-W-4K-1 | 随机写 | 4KB | 1 | 单线程随机对象名写入 4KB，验证随机命名写入正确性 | `ObjectLexical=false` |
+| S1-RAND-W-4K-10 | 随机写 | 4KB | 10 | 10 并发随机写 4KB，对比顺序写的 TPS 差异 | `ObjectLexical=false, ThreadsPerUser=10` |
+| S1-RAND-W-4K-100 | 随机写 | 4KB | 100 | 100 并发随机写 4KB，验证高并发随机写性能 | `ObjectLexical=false, ThreadsPerUser=100` |
+| S1-RAND-W-32K-1 | 随机写 | 32KB | 1 | 单线程随机写 32KB 对象 | `ObjectSize=32768, ObjectLexical=false` |
+| S1-RAND-W-32K-10 | 随机写 | 32KB | 10 | 10 并发随机写 32KB | `ObjectSize=32768, ObjectLexical=false, ThreadsPerUser=10` |
+| S1-RAND-W-32K-100 | 随机写 | 32KB | 100 | 100 并发随机写 32KB | `ObjectSize=32768, ObjectLexical=false, ThreadsPerUser=100` |
+| S1-RAND-W-1M-1 | 随机写 | 1MB | 1 | 单线程随机写 1MB 对象 | `ObjectSize=1048576, ObjectLexical=false` |
+| S1-RAND-W-1M-10 | 随机写 | 1MB | 10 | 10 并发随机写 1MB | `ObjectSize=1048576, ObjectLexical=false, ThreadsPerUser=10` |
+| S1-RAND-W-1M-100 | 随机写 | 1MB | 100 | 100 并发随机写 1MB | `ObjectSize=1048576, ObjectLexical=false, ThreadsPerUser=100` |
+| S1-RAND-W-4M-1 | 随机写 | 4MB | 1 | 单线程随机写 4MB 对象 | `ObjectSize=4194304, ObjectLexical=false` |
+| S1-RAND-W-4M-10 | 随机写 | 4MB | 10 | 10 并发随机写 4MB | `ObjectSize=4194304, ObjectLexical=false, ThreadsPerUser=10` |
+| S1-RAND-W-4M-100 | 随机写 | 4MB | 100 | 100 并发随机写 4MB | `ObjectSize=4194304, ObjectLexical=false, ThreadsPerUser=100` |
+| S1-SEQ-R-4K-1 | 顺序读 | 4KB | 1 | 单线程顺序读取 4KB 对象，验证 GetObject 字典序遍历正确性 | `Testcase=202, IsRandomGet=false` |
+| S1-SEQ-R-4K-10 | 顺序读 | 4KB | 10 | 10 并发顺序读 4KB，验证读并发线性扩展 | `Testcase=202, IsRandomGet=false, ThreadsPerUser=10` |
+| S1-SEQ-R-4K-100 | 顺序读 | 4KB | 100 | 100 并发顺序读 4KB，验证高并发顺序读 TPS 上限 | `Testcase=202, IsRandomGet=false, ThreadsPerUser=100` |
+| S1-SEQ-R-32K-1 | 顺序读 | 32KB | 1 | 单线程顺序读 32KB，对比 4KB 读取 TPS 与吞吐差异 | `Testcase=202, ObjectSize=32768, IsRandomGet=false` |
+| S1-SEQ-R-32K-10 | 顺序读 | 32KB | 10 | 10 并发顺序读 32KB | `Testcase=202, ObjectSize=32768, IsRandomGet=false, ThreadsPerUser=10` |
+| S1-SEQ-R-32K-100 | 顺序读 | 32KB | 100 | 100 并发顺序读 32KB | `Testcase=202, ObjectSize=32768, IsRandomGet=false, ThreadsPerUser=100` |
+| S1-SEQ-R-1M-1 | 顺序读 | 1MB | 1 | 单线程顺序读 1MB，验证大对象读取延迟和吞吐基线 | `Testcase=202, ObjectSize=1048576, IsRandomGet=false` |
+| S1-SEQ-R-1M-10 | 顺序读 | 1MB | 10 | 10 并发顺序读 1MB | `Testcase=202, ObjectSize=1048576, IsRandomGet=false, ThreadsPerUser=10` |
+| S1-SEQ-R-1M-100 | 顺序读 | 1MB | 100 | 100 并发顺序读 1MB | `Testcase=202, ObjectSize=1048576, IsRandomGet=false, ThreadsPerUser=100` |
+| S1-SEQ-R-4M-1 | 顺序读 | 4MB | 1 | 单线程顺序读 4MB | `Testcase=202, ObjectSize=4194304, IsRandomGet=false` |
+| S1-SEQ-R-4M-10 | 顺序读 | 4MB | 10 | 10 并发顺序读 4MB | `Testcase=202, ObjectSize=4194304, IsRandomGet=false, ThreadsPerUser=10` |
+| S1-SEQ-R-4M-100 | 顺序读 | 4MB | 100 | 100 并发顺序读 4MB | `Testcase=202, ObjectSize=4194304, IsRandomGet=false, ThreadsPerUser=100` |
+| S1-RAND-R-4K-1 | 随机读 | 4KB | 1 | 单线程随机读取 4KB 对象，验证随机访问正确性 | `Testcase=202, IsRandomGet=true` |
+| S1-RAND-R-4K-10 | 随机读 | 4KB | 10 | 10 并发随机读 4KB，对比顺序读的 TPS 差异 | `Testcase=202, IsRandomGet=true, ThreadsPerUser=10` |
+| S1-RAND-R-4K-100 | 随机读 | 4KB | 100 | 100 并发随机读 4KB，验证高并发随机读 TPS | `Testcase=202, IsRandomGet=true, ThreadsPerUser=100` |
+| S1-RAND-R-32K-1 | 随机读 | 32KB | 1 | 单线程随机读 32KB | `Testcase=202, ObjectSize=32768, IsRandomGet=true` |
+| S1-RAND-R-32K-10 | 随机读 | 32KB | 10 | 10 并发随机读 32KB | `Testcase=202, ObjectSize=32768, IsRandomGet=true, ThreadsPerUser=10` |
+| S1-RAND-R-32K-100 | 随机读 | 32KB | 100 | 100 并发随机读 32KB | `Testcase=202, ObjectSize=32768, IsRandomGet=true, ThreadsPerUser=100` |
+| S1-RAND-R-1M-1 | 随机读 | 1MB | 1 | 单线程随机读 1MB | `Testcase=202, ObjectSize=1048576, IsRandomGet=true` |
+| S1-RAND-R-1M-10 | 随机读 | 1MB | 10 | 10 并发随机读 1MB | `Testcase=202, ObjectSize=1048576, IsRandomGet=true, ThreadsPerUser=10` |
+| S1-RAND-R-1M-100 | 随机读 | 1MB | 100 | 100 并发随机读 1MB | `Testcase=202, ObjectSize=1048576, IsRandomGet=true, ThreadsPerUser=100` |
+| S1-RAND-R-4M-1 | 随机读 | 4MB | 1 | 单线程随机读 4MB | `Testcase=202, ObjectSize=4194304, IsRandomGet=true` |
+| S1-RAND-R-4M-10 | 随机读 | 4MB | 10 | 10 并发随机读 4MB | `Testcase=202, ObjectSize=4194304, IsRandomGet=true, ThreadsPerUser=10` |
+| S1-RAND-R-4M-100 | 随机读 | 4MB | 100 | 100 并发随机读 4MB | `Testcase=202, ObjectSize=4194304, IsRandomGet=true, ThreadsPerUser=100` |
+
+### 场景二：4KB 块大小 IOPS 峰值测试（6 个用例）
+
+> 测试目标：使用 4KB 小块大小，在 100/500 高并发下压测 OBS 的 IOPS 极限能力，分别测试纯读、纯写、读写混合（2:1）场景。
+
+| 用例编号 | 读写模式 | 对象大小 | 并发数 | 测试点 | config 关键配置 |
+|:--------:|:-------:|:-------:|:------:|-------|---------------|
+| S2-READ-4K-100 | 混合读（纯读） | 4KB | 100 | 100 并发纯 GetObject，测试 4KB 稳态读 IOPS 峰值，记录 P50/P90/P99 延迟 | `MixOperations=202, RunSeconds=300` |
+| S2-READ-4K-500 | 混合读（纯读） | 4KB | 500 | 500 并发纯 GetObject，极限压测 4KB 读 IOPS 上限，验证并发提升带来的 IOPS 增益 | `MixOperations=202, ThreadsPerUser=500, RunSeconds=300` |
+| S2-WRITE-4K-100 | 混合写（纯写） | 4KB | 100 | 100 并发纯 PutObject，测试 4KB 稳态写 IOPS 峰值 | `MixOperations=201, RunSeconds=300` |
+| S2-WRITE-4K-500 | 混合写（纯写） | 4KB | 500 | 500 并发纯 PutObject，极限压测 4KB 写 IOPS 上限 | `MixOperations=201, ThreadsPerUser=500, RunSeconds=300` |
+| S2-MIX-4K-100 | 混合读写 2:1 | 4KB | 100 | 100 并发混合读写（2 Get:1 Put），测试 4KB 混合负载下总 IOPS 峰值及读写比例是否符合预期 | `MixOperations=202,202,201, RunSeconds=300` |
+| S2-MIX-4K-500 | 混合读写 2:1 | 4KB | 500 | 500 并发混合读写 2:1，极限压测 4KB 混合 IOPS 上限 | `MixOperations=202,202,201, ThreadsPerUser=500, RunSeconds=300` |
+
+### 场景三：32KB 块大小 IOPS 峰值测试（6 个用例）
+
+> 测试目标：使用 32KB 中等块大小，在 100/500 高并发下压测 IOPS 极限能力，与 4KB 对比 IOPS 下降幅度和吞吐提升幅度。
+
+| 用例编号 | 读写模式 | 对象大小 | 并发数 | 测试点 | config 关键配置 |
+|:--------:|:-------:|:-------:|:------:|-------|---------------|
+| S3-READ-32K-100 | 混合读（纯读） | 32KB | 100 | 100 并发纯 GetObject，测试 32KB 读 IOPS 峰值，与 S2-READ-4K-100 对比 IOPS/吞吐差异 | `ObjectSize=32768, MixOperations=202, RunSeconds=300` |
+| S3-READ-32K-500 | 混合读（纯读） | 32KB | 500 | 500 并发纯 GetObject，极限压测 32KB 读 IOPS 上限 | `ObjectSize=32768, MixOperations=202, ThreadsPerUser=500, RunSeconds=300` |
+| S3-WRITE-32K-100 | 混合写（纯写） | 32KB | 100 | 100 并发纯 PutObject，测试 32KB 写 IOPS 峰值 | `ObjectSize=32768, MixOperations=201, RunSeconds=300` |
+| S3-WRITE-32K-500 | 混合写（纯写） | 32KB | 500 | 500 并发纯 PutObject，极限压测 32KB 写 IOPS 上限 | `ObjectSize=32768, MixOperations=201, ThreadsPerUser=500, RunSeconds=300` |
+| S3-MIX-32K-100 | 混合读写 2:1 | 32KB | 100 | 100 并发混合读写 2:1，测试 32KB 混合总 IOPS 峰值 | `ObjectSize=32768, MixOperations=202,202,201, RunSeconds=300` |
+| S3-MIX-32K-500 | 混合读写 2:1 | 32KB | 500 | 500 并发混合读写 2:1，极限压测 32KB 混合 IOPS 上限 | `ObjectSize=32768, MixOperations=202,202,201, ThreadsPerUser=500, RunSeconds=300` |
+
+### 场景四：1MB 块大小带宽峰值测试（6 个用例）
+
+> 测试目标：使用 1MB 大块大小，在 100/500 高并发下压测 OBS 的吞吐量（带宽）极限能力，关注 MB/s 或 Gbps 级别的带宽表现。
+
+| 用例编号 | 读写模式 | 对象大小 | 并发数 | 测试点 | config 关键配置 |
+|:--------:|:-------:|:-------:|:------:|-------|---------------|
+| S4-READ-1M-100 | 混合读（纯读） | 1MB | 100 | 100 并发纯 GetObject，测试 1MB 稳态读带宽峰值（MB/s），提取 RecvBytes 计算吞吐 | `ObjectSize=1048576, MixOperations=202, RunSeconds=300` |
+| S4-READ-1M-500 | 混合读（纯读） | 1MB | 500 | 500 并发纯 GetObject，极限压测 1MB 读带宽上限，验证是否触及 OBS 或网络带宽瓶颈 | `ObjectSize=1048576, MixOperations=202, ThreadsPerUser=500, RunSeconds=300` |
+| S4-WRITE-1M-100 | 混合写（纯写） | 1MB | 100 | 100 并发纯 PutObject，测试 1MB 稳态写带宽峰值，提取 SendBytes 计算吞吐 | `ObjectSize=1048576, MixOperations=201, RunSeconds=300` |
+| S4-WRITE-1M-500 | 混合写（纯写） | 1MB | 500 | 500 并发纯 PutObject，极限压测 1MB 写带宽上限 | `ObjectSize=1048576, MixOperations=201, ThreadsPerUser=500, RunSeconds=300` |
+| S4-MIX-1M-100 | 混合读写 2:1 | 1MB | 100 | 100 并发混合读写 2:1，测试 1MB 混合总带宽峰值，验证读带宽≈2×写带宽 | `ObjectSize=1048576, MixOperations=202,202,201, RunSeconds=300` |
+| S4-MIX-1M-500 | 混合读写 2:1 | 1MB | 500 | 500 并发混合读写 2:1，极限压测 1MB 混合带宽上限 | `ObjectSize=1048576, MixOperations=202,202,201, ThreadsPerUser=500, RunSeconds=300` |
+
+### 场景五：4MB 块大小带宽峰值测试（6 个用例）
+
+> 测试目标：使用 4MB 最大块大小，在 100/500 高并发下压测 OBS 极限带宽能力，验证最大吞吐量是否达到 OBS 规格上限。
+
+| 用例编号 | 读写模式 | 对象大小 | 并发数 | 测试点 | config 关键配置 |
+|:--------:|:-------:|:-------:|:------:|-------|---------------|
+| S5-READ-4M-100 | 混合读（纯读） | 4MB | 100 | 100 并发纯 GetObject，测试 4MB 稳态读带宽峰值，对比 1MB 场景的带宽提升 | `ObjectSize=4194304, MixOperations=202, RunSeconds=300` |
+| S5-READ-4M-500 | 混合读（纯读） | 4MB | 500 | 500 并发纯 GetObject，极限压测 4MB 读带宽上限，验证是否达到 OBS 或网络物理瓶颈 | `ObjectSize=4194304, MixOperations=202, ThreadsPerUser=500, RunSeconds=300` |
+| S5-WRITE-4M-100 | 混合写（纯写） | 4MB | 100 | 100 并发纯 PutObject，测试 4MB 稳态写带宽峰值 | `ObjectSize=4194304, MixOperations=201, RunSeconds=300` |
+| S5-WRITE-4M-500 | 混合写（纯写） | 4MB | 500 | 500 并发纯 PutObject，极限压测 4MB 写带宽上限 | `ObjectSize=4194304, MixOperations=201, ThreadsPerUser=500, RunSeconds=300` |
+| S5-MIX-4M-100 | 混合读写 2:1 | 4MB | 100 | 100 并发混合读写 2:1，测试 4MB 混合总带宽峰值，验证读带宽≈2×写带宽 | `ObjectSize=4194304, MixOperations=202,202,201, RunSeconds=300` |
+| S5-MIX-4M-500 | 混合读写 2:1 | 4MB | 500 | 500 并发混合读写 2:1，极限压测 4MB 混合带宽上限 | `ObjectSize=4194304, MixOperations=202,202,201, ThreadsPerUser=500, RunSeconds=300` |
+
+---
+
 ## 全局预置条件（适用于所有场景）
 
 ### 1. 环境准备
