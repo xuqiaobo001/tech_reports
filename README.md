@@ -182,6 +182,7 @@
 | 69 | [hermes_agent_rl_training_analysis](./hermes_agent_rl_training_analysis/) | Hermes-Agent RL 训练系统技术分析 — 两阶段架构、Agent Loop、ToolContext 奖励验证、数据生成管线 |
 | 70 | [hermes_agent_rl_separation_feasibility](./hermes_agent_rl_separation_feasibility/) | Hermes-Agent 常规对话与 RL 训练分离部署可行性分析 — 源码级耦合度评估与三种分离架构方案 |
 | 71 | [ray_vs_pytorch_ddp_pod_recovery_analysis](./ray_vs_pytorch_ddp_pod_recovery_analysis/) | Ray RL vs PyTorch DDP 故障恢复机制深度对比 — 五大架构差异解析，Ray Pod 级恢复 vs DDP Job 级重建根因分析 |
+| 72 | [ray_cpu_npu_mixed_pipeline_design](./ray_cpu_npu_mixed_pipeline_design/) | 基于 Ray 的 CPU + NPU 混合管道方案 — 多模态图片预处理(CPU) + 模型训练(NPU) 异构流水线设计 |
 
 ---
 
@@ -189,7 +190,7 @@
 
 | # | 目录 | 简介 |
 |---|------|------|
-| 72 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
+| 73 | [video_generation_models_survey](./video_generation_models_survey/) | 视频生成大模型全景调研 — Wan2.1/HunyuanVideo/CogVideoX/Open-Sora 等模型参数量、训练框架（预训练/SFT/LoRA/RLHF）、使用场景、常见故障分析 |
 
 ---
 
@@ -210,5 +211,5 @@
 | 大模型技术演进 | 3 |
 | 视频生成大模型 | 1 |
 | 大模型部署方案 | 0 |
-| RL 训练系统 | 3 |
-| **合计** | **72** |
+| RL 训练系统 | 4 |
+| **合计** | **73** |
