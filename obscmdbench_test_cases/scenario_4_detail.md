@@ -301,6 +301,9 @@ MixOperation 仅执行 GetObject(202)，测试 1MB 纯读带宽极限。提取 R
 | **测试类型** | 混合读（纯读带宽峰值） |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 48.8 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 测试1MB混合读，100并发 |
 
 **预置条件**：
@@ -609,6 +612,9 @@ IsMaster = false
 | **测试类型** | 混合读（纯读带宽峰值） |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 500 (Users=1, ThreadsPerUser=500) |
+| **对象总数** | 100,000 |
+| **预计写入/读取数据量** | 97.7 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(500) × BucketsPerUser(1) × ObjectsPerBucketPerThread(200) = **100,000** |
 | **测试目标** | 测试1MB混合读，500并发 |
 
 **预置条件**：
@@ -921,6 +927,9 @@ MixOperation 仅执行 PutObject(201)，测试 1MB 纯写带宽极限。提取 S
 | **测试类型** | 混合写（纯写带宽峰值） |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 48.8 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 测试1MB混合写，100并发 |
 
 **预置条件**：
@@ -1228,6 +1237,9 @@ IsMaster = false
 | **测试类型** | 混合写（纯写带宽峰值） |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 500 (Users=1, ThreadsPerUser=500) |
+| **对象总数** | 100,000 |
+| **预计写入/读取数据量** | 97.7 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(500) × BucketsPerUser(1) × ObjectsPerBucketPerThread(200) = **100,000** |
 | **测试目标** | 测试1MB混合写，500并发 |
 
 **预置条件**：
@@ -1539,6 +1551,9 @@ MixOperation 执行 `202,202,201`（2Get+1Put），测试 1MB 混合带宽极限
 | **测试类型** | 混合读写 2:1（带宽峰值） |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 48.8 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 测试1MB混合读写 2:1，100并发 |
 
 **预置条件**：
@@ -1845,6 +1860,9 @@ IsMaster = false
 | **测试类型** | 混合读写 2:1（带宽峰值） |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 500 (Users=1, ThreadsPerUser=500) |
+| **对象总数** | 100,000 |
+| **预计写入/读取数据量** | 97.7 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(500) × BucketsPerUser(1) × ObjectsPerBucketPerThread(200) = **100,000** |
 | **测试目标** | 测试1MB混合读写 2:1，500并发 |
 
 **预置条件**：

@@ -303,8 +303,25 @@ def obj_count(size, conc):
         return {4096:500, 32768:500, 1048576:50, 4194304:20}[size]
 
 
-def case_block(case_id, test_type, obj_size, conc, cfg, run_cmd, preconditions, expected, goal=""):
+def fmt_size(bytes_val):
+    """将字节数格式化为可读字符串"""
+    if bytes_val >= 1073741824:
+        return "%.1f GB" % (bytes_val / 1073741824.0)
+    elif bytes_val >= 1048576:
+        return "%.1f MB" % (bytes_val / 1048576.0)
+    elif bytes_val >= 1024:
+        return "%.1f KB" % (bytes_val / 1024.0)
+    else:
+        return "%d B" % bytes_val
+
+
+def case_block(case_id, test_type, obj_size, conc, cfg, run_cmd, preconditions, expected, goal="",
+               users=1, buckets_per_user=1, objects_per_bucket=1000):
     """生成单个用例的完整markdown"""
+    # 计算对象总数和数据量
+    total_objects = users * conc * buckets_per_user * objects_per_bucket
+    total_bytes = total_objects * obj_size
+
     b = []
     b.append("#### 用例编号：%s" % case_id)
     b.append("")
@@ -313,7 +330,10 @@ def case_block(case_id, test_type, obj_size, conc, cfg, run_cmd, preconditions, 
     b.append("| **用例编号** | %s |" % case_id)
     b.append("| **测试类型** | %s |" % test_type)
     b.append("| **对象大小** | %s (%d 字节) |" % (sz_label(obj_size), obj_size))
-    b.append("| **并发数** | %d (Users=1, ThreadsPerUser=%d) |" % (conc, conc))
+    b.append("| **并发数** | %d (Users=%d, ThreadsPerUser=%d) |" % (conc, users, conc))
+    b.append("| **对象总数** | %s |" % "{:,}".format(total_objects))
+    b.append("| **预计写入/读取数据量** | %s |" % fmt_size(total_bytes))
+    b.append("| **计算公式** | Users(%d) × ThreadsPerUser(%d) × BucketsPerUser(%d) × ObjectsPerBucketPerThread(%d) = **%s** |" % (users, conc, buckets_per_user, objects_per_bucket, "{:,}".format(total_objects)))
     if goal:
         b.append("| **测试目标** | %s |" % goal)
     b.append("")
@@ -467,7 +487,8 @@ for s in SIZES:
             "记录 TPS、平均延迟、吞吐量指标",
         ]
         goal = "%s %s顺序写入，验证TPS/延迟基线，%d并发" % (sz_label(s), "顺序" if s <= 32768 else "大对象顺序", c)
-        out.append(case_block(cid, "顺序写", s, c, cfg, run, pcs, ers, goal))
+        out.append(case_block(cid, "顺序写", s, c, cfg, run, pcs, ers, goal,
+                              users=1, buckets_per_user=1, objects_per_bucket=oc))
 
 # --- 随机写 12 个 ---
 out.append("### 场景一-2：随机写（Testcase=201, ObjectLexical=false）")
@@ -492,7 +513,8 @@ for s in SIZES:
             "记录 TPS、平均延迟",
         ]
         goal = "%s 随机对象名写入，验证随机写TPS，%d并发" % (sz_label(s), c)
-        out.append(case_block(cid, "随机写", s, c, cfg, run, pcs, ers, goal))
+        out.append(case_block(cid, "随机写", s, c, cfg, run, pcs, ers, goal,
+                              users=1, buckets_per_user=1, objects_per_bucket=oc))
 
 # --- 顺序读 12 个 ---
 out.append("### 场景一-3：顺序读（Testcase=202, IsRandomGet=false）")
@@ -519,7 +541,8 @@ for s in SIZES:
             "记录 TPS、平均延迟、下载吞吐量（RecvBytes/s）",
         ]
         goal = "%s 顺序遍历读取（依赖前置写入数据），%d并发" % (sz_label(s), c)
-        out.append(case_block(cid, "顺序读", s, c, cfg, run, pcs, ers, goal))
+        out.append(case_block(cid, "顺序读", s, c, cfg, run, pcs, ers, goal,
+                              users=1, buckets_per_user=1, objects_per_bucket=woc))
 
 # --- 随机读 12 个 ---
 out.append("### 场景一-4：随机读（Testcase=202, IsRandomGet=true）")
@@ -545,7 +568,8 @@ for s in SIZES:
             "记录 TPS、平均延迟、下载吞吐量",
         ]
         goal = "%s 随机选取读取（依赖前置写入数据），%d并发" % (sz_label(s), c)
-        out.append(case_block(cid, "随机读", s, c, cfg, run, pcs, ers, goal))
+        out.append(case_block(cid, "随机读", s, c, cfg, run, pcs, ers, goal,
+                              users=1, buckets_per_user=1, objects_per_bucket=woc))
 
 
 # ========== 场景二：4KB IOPS 峰值 ==========
@@ -596,7 +620,8 @@ for conc in [100, 500]:
         "P99 延迟 < 100ms",
     ]
     out.append(case_block(cid, "混合读（纯 GetObject）", 4096, conc, cfg, run, pcs, ers,
-                          "测试4KB纯读IOPS峰值，%d并发" % conc))
+                          "测试4KB纯读IOPS峰值，%d并发" % conc,
+                          users=1, buckets_per_user=1, objects_per_bucket=oc))
 
 # 混合写
 out.append("### 场景二-2：混合写（纯写 IOPS 峰值）")
@@ -619,7 +644,8 @@ for conc in [100, 500]:
         "P99 延迟 < 200ms",
     ]
     out.append(case_block(cid, "混合写（纯 PutObject）", 4096, conc, cfg, run, pcs, ers,
-                          "测试4KB纯写IOPS峰值，%d并发" % conc))
+                          "测试4KB纯写IOPS峰值，%d并发" % conc,
+                          users=1, buckets_per_user=1, objects_per_bucket=oc))
 
 # 混合读写
 out.append("### 场景二-3：混合读写 2:1（IOPS 峰值）")
@@ -642,7 +668,8 @@ for conc in [100, 500]:
         "P99 延迟 < 150ms",
     ]
     out.append(case_block(cid, "混合读写（读:写=2:1）", 4096, conc, cfg, run, pcs, ers,
-                          "测试4KB混合读写(2:1)IOPS峰值，%d并发" % conc))
+                          "测试4KB混合读写(2:1)IOPS峰值，%d并发" % conc,
+                          users=1, buckets_per_user=1, objects_per_bucket=oc))
 
 
 # ========== 场景三：32KB IOPS 峰值 ==========
@@ -713,7 +740,8 @@ for section, label, mix_op, desc_extra in [
                 "混合 IOPS 介于纯读和纯写之间",
             ]
         goal = "测试32KB%s，%d并发" % (label.split("（")[0], conc)
-        out.append(case_block(cid, label, 32768, conc, cfg, run, pcs, ers, goal))
+        out.append(case_block(cid, label, 32768, conc, cfg, run, pcs, ers, goal,
+                              users=1, buckets_per_user=1, objects_per_bucket=oc))
 
 
 # ========== 场景四：1MB 带宽峰值 ==========
@@ -783,7 +811,8 @@ for section, label, mix_op, desc_extra in [
                 "混合总带宽 = 读带宽 + 写带宽，介于纯读和纯写之间",
             ]
         goal = "测试1MB%s，%d并发" % (label.split("（")[0], conc)
-        out.append(case_block(cid, label, 1048576, conc, cfg, run, pcs, ers, goal))
+        out.append(case_block(cid, label, 1048576, conc, cfg, run, pcs, ers, goal,
+                              users=1, buckets_per_user=1, objects_per_bucket=oc))
 
 
 # ========== 场景五：4MB 带宽峰值 ==========
@@ -856,7 +885,8 @@ for section, label, mix_op, desc_extra in [
                 "混合总带宽 = 读带宽 + 写带宽，介于纯读和纯写之间",
             ]
         goal = "测试4MB%s，%d并发" % (label.split("（")[0], conc)
-        out.append(case_block(cid, label, 4194304, conc, cfg, run, pcs, ers, goal))
+        out.append(case_block(cid, label, 4194304, conc, cfg, run, pcs, ers, goal,
+                              users=1, buckets_per_user=1, objects_per_bucket=oc))
 
 
 # ========== 全场景汇总 ==========

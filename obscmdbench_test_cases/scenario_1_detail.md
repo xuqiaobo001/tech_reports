@@ -16,6 +16,9 @@ PutObject 操作，对象名按字典序排列（ObjectLexical=true）。后续�
 | **测试类型** | 顺序写 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 3.9 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **1,000** |
 | **测试目标** | 4KB 顺序顺序写入，验证TPS/延迟基线，1并发 |
 
 **预置条件**：
@@ -323,6 +326,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 10,000 |
+| **预计写入/读取数据量** | 39.1 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **10,000** |
 | **测试目标** | 4KB 顺序顺序写入，验证TPS/延迟基线，10并发 |
 
 **预置条件**：
@@ -630,6 +636,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 195.3 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 4KB 顺序顺序写入，验证TPS/延迟基线，100并发 |
 
 **预置条件**：
@@ -937,6 +946,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 31.2 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **1,000** |
 | **测试目标** | 32KB 顺序顺序写入，验证TPS/延迟基线，1并发 |
 
 **预置条件**：
@@ -1244,6 +1256,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 10,000 |
+| **预计写入/读取数据量** | 312.5 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **10,000** |
 | **测试目标** | 32KB 顺序顺序写入，验证TPS/延迟基线，10并发 |
 
 **预置条件**：
@@ -1551,6 +1566,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 1.5 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 32KB 顺序顺序写入，验证TPS/延迟基线，100并发 |
 
 **预置条件**：
@@ -1858,6 +1876,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 200 |
+| **预计写入/读取数据量** | 200.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(200) = **200** |
 | **测试目标** | 1MB 大对象顺序顺序写入，验证TPS/延迟基线，1并发 |
 
 **预置条件**：
@@ -2165,6 +2186,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 1000.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(100) = **1,000** |
 | **测试目标** | 1MB 大对象顺序顺序写入，验证TPS/延迟基线，10并发 |
 
 **预置条件**：
@@ -2472,6 +2496,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 5,000 |
+| **预计写入/读取数据量** | 4.9 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(50) = **5,000** |
 | **测试目标** | 1MB 大对象顺序顺序写入，验证TPS/延迟基线，100并发 |
 
 **预置条件**：
@@ -2779,6 +2806,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 100 |
+| **预计写入/读取数据量** | 400.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(100) = **100** |
 | **测试目标** | 4MB 大对象顺序顺序写入，验证TPS/延迟基线，1并发 |
 
 **预置条件**：
@@ -3086,6 +3116,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 500 |
+| **预计写入/读取数据量** | 2.0 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(50) = **500** |
 | **测试目标** | 4MB 大对象顺序顺序写入，验证TPS/延迟基线，10并发 |
 
 **预置条件**：
@@ -3393,6 +3426,9 @@ IsMaster = false
 | **测试类型** | 顺序写 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 2,000 |
+| **预计写入/读取数据量** | 7.8 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(20) = **2,000** |
 | **测试目标** | 4MB 大对象顺序顺序写入，验证TPS/延迟基线，100并发 |
 
 **预置条件**：
@@ -3704,6 +3740,9 @@ PutObject 操作，对象名为随机生成（ObjectLexical=false），长度 15
 | **测试类型** | 随机写 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 3.9 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **1,000** |
 | **测试目标** | 4KB 随机对象名写入，验证随机写TPS，1并发 |
 
 **预置条件**：
@@ -4010,6 +4049,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 10,000 |
+| **预计写入/读取数据量** | 39.1 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **10,000** |
 | **测试目标** | 4KB 随机对象名写入，验证随机写TPS，10并发 |
 
 **预置条件**：
@@ -4316,6 +4358,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 195.3 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 4KB 随机对象名写入，验证随机写TPS，100并发 |
 
 **预置条件**：
@@ -4622,6 +4667,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 31.2 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **1,000** |
 | **测试目标** | 32KB 随机对象名写入，验证随机写TPS，1并发 |
 
 **预置条件**：
@@ -4928,6 +4976,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 10,000 |
+| **预计写入/读取数据量** | 312.5 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **10,000** |
 | **测试目标** | 32KB 随机对象名写入，验证随机写TPS，10并发 |
 
 **预置条件**：
@@ -5234,6 +5285,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 1.5 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 32KB 随机对象名写入，验证随机写TPS，100并发 |
 
 **预置条件**：
@@ -5540,6 +5594,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 200 |
+| **预计写入/读取数据量** | 200.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(200) = **200** |
 | **测试目标** | 1MB 随机对象名写入，验证随机写TPS，1并发 |
 
 **预置条件**：
@@ -5846,6 +5903,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 1000.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(100) = **1,000** |
 | **测试目标** | 1MB 随机对象名写入，验证随机写TPS，10并发 |
 
 **预置条件**：
@@ -6152,6 +6212,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 5,000 |
+| **预计写入/读取数据量** | 4.9 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(50) = **5,000** |
 | **测试目标** | 1MB 随机对象名写入，验证随机写TPS，100并发 |
 
 **预置条件**：
@@ -6458,6 +6521,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 100 |
+| **预计写入/读取数据量** | 400.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(100) = **100** |
 | **测试目标** | 4MB 随机对象名写入，验证随机写TPS，1并发 |
 
 **预置条件**：
@@ -6764,6 +6830,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 500 |
+| **预计写入/读取数据量** | 2.0 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(50) = **500** |
 | **测试目标** | 4MB 随机对象名写入，验证随机写TPS，10并发 |
 
 **预置条件**：
@@ -7070,6 +7139,9 @@ IsMaster = false
 | **测试类型** | 随机写 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 2,000 |
+| **预计写入/读取数据量** | 7.8 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(20) = **2,000** |
 | **测试目标** | 4MB 随机对象名写入，验证随机写TPS，100并发 |
 
 **预置条件**：
@@ -7380,6 +7452,9 @@ GetObject 操作，按字典序遍历桶内所有对象。**前置依赖：需�
 | **测试类型** | 顺序读 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 3.9 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **1,000** |
 | **测试目标** | 4KB 顺序遍历读取（依赖前置写入数据），1并发 |
 
 **预置条件**：
@@ -7687,6 +7762,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 10,000 |
+| **预计写入/读取数据量** | 39.1 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **10,000** |
 | **测试目标** | 4KB 顺序遍历读取（依赖前置写入数据），10并发 |
 
 **预置条件**：
@@ -7994,6 +8072,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 195.3 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 4KB 顺序遍历读取（依赖前置写入数据），100并发 |
 
 **预置条件**：
@@ -8301,6 +8382,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 31.2 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **1,000** |
 | **测试目标** | 32KB 顺序遍历读取（依赖前置写入数据），1并发 |
 
 **预置条件**：
@@ -8608,6 +8692,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 10,000 |
+| **预计写入/读取数据量** | 312.5 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **10,000** |
 | **测试目标** | 32KB 顺序遍历读取（依赖前置写入数据），10并发 |
 
 **预置条件**：
@@ -8915,6 +9002,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 1.5 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 32KB 顺序遍历读取（依赖前置写入数据），100并发 |
 
 **预置条件**：
@@ -9222,6 +9312,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 200 |
+| **预计写入/读取数据量** | 200.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(200) = **200** |
 | **测试目标** | 1MB 顺序遍历读取（依赖前置写入数据），1并发 |
 
 **预置条件**：
@@ -9529,6 +9622,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 1000.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(100) = **1,000** |
 | **测试目标** | 1MB 顺序遍历读取（依赖前置写入数据），10并发 |
 
 **预置条件**：
@@ -9836,6 +9932,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 5,000 |
+| **预计写入/读取数据量** | 4.9 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(50) = **5,000** |
 | **测试目标** | 1MB 顺序遍历读取（依赖前置写入数据），100并发 |
 
 **预置条件**：
@@ -10143,6 +10242,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 100 |
+| **预计写入/读取数据量** | 400.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(100) = **100** |
 | **测试目标** | 4MB 顺序遍历读取（依赖前置写入数据），1并发 |
 
 **预置条件**：
@@ -10450,6 +10552,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 500 |
+| **预计写入/读取数据量** | 2.0 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(50) = **500** |
 | **测试目标** | 4MB 顺序遍历读取（依赖前置写入数据），10并发 |
 
 **预置条件**：
@@ -10757,6 +10862,9 @@ IsMaster = false
 | **测试类型** | 顺序读 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 2,000 |
+| **预计写入/读取数据量** | 7.8 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(20) = **2,000** |
 | **测试目标** | 4MB 顺序遍历读取（依赖前置写入数据），100并发 |
 
 **预置条件**：
@@ -11068,6 +11176,9 @@ GetObject 操作，随机选取桶内对象读取，不按顺序遍历。**前�
 | **测试类型** | 随机读 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 3.9 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **1,000** |
 | **测试目标** | 4KB 随机选取读取（依赖前置写入数据），1并发 |
 
 **预置条件**：
@@ -11375,6 +11486,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 10,000 |
+| **预计写入/读取数据量** | 39.1 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **10,000** |
 | **测试目标** | 4KB 随机选取读取（依赖前置写入数据），10并发 |
 
 **预置条件**：
@@ -11682,6 +11796,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 195.3 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 4KB 随机选取读取（依赖前置写入数据），100并发 |
 
 **预置条件**：
@@ -11989,6 +12106,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 31.2 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **1,000** |
 | **测试目标** | 32KB 随机选取读取（依赖前置写入数据），1并发 |
 
 **预置条件**：
@@ -12296,6 +12416,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 10,000 |
+| **预计写入/读取数据量** | 312.5 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **10,000** |
 | **测试目标** | 32KB 随机选取读取（依赖前置写入数据），10并发 |
 
 **预置条件**：
@@ -12603,6 +12726,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 32KB (32768 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 50,000 |
+| **预计写入/读取数据量** | 1.5 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(500) = **50,000** |
 | **测试目标** | 32KB 随机选取读取（依赖前置写入数据），100并发 |
 
 **预置条件**：
@@ -12910,6 +13036,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 200 |
+| **预计写入/读取数据量** | 200.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(200) = **200** |
 | **测试目标** | 1MB 随机选取读取（依赖前置写入数据），1并发 |
 
 **预置条件**：
@@ -13217,6 +13346,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 1,000 |
+| **预计写入/读取数据量** | 1000.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(100) = **1,000** |
 | **测试目标** | 1MB 随机选取读取（依赖前置写入数据），10并发 |
 
 **预置条件**：
@@ -13524,6 +13656,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 1MB (1048576 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 5,000 |
+| **预计写入/读取数据量** | 4.9 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(50) = **5,000** |
 | **测试目标** | 1MB 随机选取读取（依赖前置写入数据），100并发 |
 
 **预置条件**：
@@ -13831,6 +13966,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 1 (Users=1, ThreadsPerUser=1) |
+| **对象总数** | 100 |
+| **预计写入/读取数据量** | 400.0 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(1) × BucketsPerUser(1) × ObjectsPerBucketPerThread(100) = **100** |
 | **测试目标** | 4MB 随机选取读取（依赖前置写入数据），1并发 |
 
 **预置条件**：
@@ -14138,6 +14276,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 10 (Users=1, ThreadsPerUser=10) |
+| **对象总数** | 500 |
+| **预计写入/读取数据量** | 2.0 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(10) × BucketsPerUser(1) × ObjectsPerBucketPerThread(50) = **500** |
 | **测试目标** | 4MB 随机选取读取（依赖前置写入数据），10并发 |
 
 **预置条件**：
@@ -14445,6 +14586,9 @@ IsMaster = false
 | **测试类型** | 随机读 |
 | **对象大小** | 4MB (4194304 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 2,000 |
+| **预计写入/读取数据量** | 7.8 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(20) = **2,000** |
 | **测试目标** | 4MB 随机选取读取（依赖前置写入数据），100并发 |
 
 **预置条件**：

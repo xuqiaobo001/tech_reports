@@ -305,6 +305,9 @@ MixOperation 模式仅执行 GetObject(202)，测试纯读 IOPS 极限。运行 
 | **测试类型** | 混合读（纯 GetObject） |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 200,000 |
+| **预计写入/读取数据量** | 781.2 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(2000) = **200,000** |
 | **测试目标** | 测试4KB纯读IOPS峰值，100并发 |
 
 **预置条件**：
@@ -614,6 +617,9 @@ IsMaster = false
 | **测试类型** | 混合读（纯 GetObject） |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 500 (Users=1, ThreadsPerUser=500) |
+| **对象总数** | 500,000 |
+| **预计写入/读取数据量** | 1.9 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(500) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **500,000** |
 | **测试目标** | 测试4KB纯读IOPS峰值，500并发 |
 
 **预置条件**：
@@ -927,6 +933,9 @@ MixOperation 模式仅执行 PutObject(201)，测试纯写 IOPS 极限。
 | **测试类型** | 混合写（纯 PutObject） |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 200,000 |
+| **预计写入/读取数据量** | 781.2 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(2000) = **200,000** |
 | **测试目标** | 测试4KB纯写IOPS峰值，100并发 |
 
 **预置条件**：
@@ -1235,6 +1244,9 @@ IsMaster = false
 | **测试类型** | 混合写（纯 PutObject） |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 500 (Users=1, ThreadsPerUser=500) |
+| **对象总数** | 500,000 |
+| **预计写入/读取数据量** | 1.9 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(500) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **500,000** |
 | **测试目标** | 测试4KB纯写IOPS峰值，500并发 |
 
 **预置条件**：
@@ -1547,6 +1559,9 @@ MixOperation 模式执行 `202,202,201`（2 个 Get + 1 个 Put），实现读�
 | **测试类型** | 混合读写（读:写=2:1） |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 100 (Users=1, ThreadsPerUser=100) |
+| **对象总数** | 200,000 |
+| **预计写入/读取数据量** | 781.2 MB |
+| **计算公式** | Users(1) × ThreadsPerUser(100) × BucketsPerUser(1) × ObjectsPerBucketPerThread(2000) = **200,000** |
 | **测试目标** | 测试4KB混合读写(2:1)IOPS峰值，100并发 |
 
 **预置条件**：
@@ -1856,6 +1871,9 @@ IsMaster = false
 | **测试类型** | 混合读写（读:写=2:1） |
 | **对象大小** | 4KB (4096 字节) |
 | **并发数** | 500 (Users=1, ThreadsPerUser=500) |
+| **对象总数** | 500,000 |
+| **预计写入/读取数据量** | 1.9 GB |
+| **计算公式** | Users(1) × ThreadsPerUser(500) × BucketsPerUser(1) × ObjectsPerBucketPerThread(1000) = **500,000** |
 | **测试目标** | 测试4KB混合读写(2:1)IOPS峰值，500并发 |
 
 **预置条件**：
